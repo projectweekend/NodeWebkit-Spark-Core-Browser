@@ -41,6 +41,13 @@ ctlMod.controller( "Main", [ "$scope", "$location",
 
         };
 
+        SPARK.on( "login", function () {
+            console.log( "FINISH: logging in" );
+            $scope.$apply( function () {
+                $location.path( "/devices" );
+            } );
+        } );
+
     } ] );
 
 
@@ -50,7 +57,6 @@ ctlMod.controller( "Login", [ "$scope", "$location",
         $scope.submitted = false;
 
         $scope.login = function () {
-            $location.path( "/devices" );
             if ( $scope.loginForm.$valid ) {
 
                 console.log( "START: logging in" );
@@ -58,13 +64,6 @@ ctlMod.controller( "Login", [ "$scope", "$location",
                 SPARK.login( {
                     username: $scope.username,
                     password: $scope.password
-                }, function ( err, data ) {
-
-                    $scope.$apply( function () {
-                        console.log( "FINISH: logging in" );
-                        $location.path( "/devices" );
-                    } );
-
                 } );
 
             } else {
@@ -77,6 +76,24 @@ ctlMod.controller( "Login", [ "$scope", "$location",
 
 ctlMod.controller( "Devices", [ "$scope",
     function ( $scope ) {
+
+        SPARK.listDevices( function ( err, data ) {
+            if ( err ) {
+                console.log( "ERROR" );
+                return console.log( err );
+            }
+            console.log( data );
+        } );
+
+        $scope.$apply( function () {
+            SPARK.listDevices( function ( err, data ) {
+                if ( err ) {
+                    console.log( "ERROR" );
+                    return console.log( err );
+                }
+                console.log( data );
+            } );
+        } );
 
     } ] );
 
