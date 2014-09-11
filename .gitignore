@@ -30,3 +30,5 @@ node_modules
 # Sublime stuff
 *.sublime-project
 *.sublime-workspace
+
+app/bower_components
