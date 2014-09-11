@@ -11,13 +11,13 @@ angMod.config( [
     "$sceDelegateProvider",
     function ( $routeProvider, $locationProvider, $sceDelegateProvider ) {
 
-        $routeProvider.when( "/home", {
-            templateUrl: "templates/home.html",
-            controller: "Home"
+        $routeProvider.when( "/login", {
+            templateUrl: "templates/login.html",
+            controller: "Login"
         } );
 
         $routeProvider.otherwise( {
-            redirectTo: "/home"
+            redirectTo: "/login"
         } );
 
 } ] );

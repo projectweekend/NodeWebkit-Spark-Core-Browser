@@ -11,13 +11,13 @@ angMod.config( [
     "$sceDelegateProvider",
     function ( $routeProvider, $locationProvider, $sceDelegateProvider ) {
 
-        $routeProvider.when( "/home", {
-            templateUrl: "templates/home.html",
-            controller: "Home"
+        $routeProvider.when( "/login", {
+            templateUrl: "templates/login.html",
+            controller: "Login"
         } );
 
         $routeProvider.otherwise( {
-            redirectTo: "/home"
+            redirectTo: "/login"
         } );
 
 } ] );
@@ -37,9 +37,18 @@ ctlMod.controller( "Main", [ "$scope", "$location",
     } ] );
 
 
-ctlMod.controller( "Home", [ "$scope", "$location",
+ctlMod.controller( "Login", [ "$scope", "$location",
     function ( $scope, $location ) {
 
+        $scope.submitted = false;
+
+        $scope.login = function () {
+            if ( $scope.loginForm.$valid ) {
+                // stuffToDo
+            } else {
+                $scope.submitted = true;
+            }
+        };
 
     } ] );
 

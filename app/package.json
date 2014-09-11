@@ -6,14 +6,14 @@
     "window": {
         "title": "Spark Core Browser",
         "icon": "link.png",
-        "toolbar": false,
+        "toolbar": true,
         "frame": true,
-        "width": 500,
-        "height": 700,
-        "min_width": 500,
-        "min_height": 700,
-        "max_width": 500,
-        "max_height": 700,
+        "width": 600,
+        "height": 600,
+        "min_width": 600,
+        "min_height": 600,
+        "max_width": 600,
+        "max_height": 600,
         "position": "mouse"
     }
 }

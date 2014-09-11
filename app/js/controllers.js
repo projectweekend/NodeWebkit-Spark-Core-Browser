@@ -13,8 +13,17 @@ ctlMod.controller( "Main", [ "$scope", "$location",
     } ] );
 
 
-ctlMod.controller( "Home", [ "$scope", "$location",
+ctlMod.controller( "Login", [ "$scope", "$location",
     function ( $scope, $location ) {
 
+        $scope.submitted = false;
+
+        $scope.login = function () {
+            if ( $scope.loginForm.$valid ) {
+                // stuffToDo
+            } else {
+                $scope.submitted = true;
+            }
+        };
 
     } ] );
