@@ -16,6 +16,11 @@ angMod.config( [
             controller: "Login"
         } );
 
+        $routeProvider.when( "/devices", {
+            templateUrl: "templates/devices.html",
+            controller: "Devices"
+        } );
+
         $routeProvider.otherwise( {
             redirectTo: "/login"
         } );

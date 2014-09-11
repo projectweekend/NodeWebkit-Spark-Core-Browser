@@ -16,6 +16,11 @@ angMod.config( [
             controller: "Login"
         } );
 
+        $routeProvider.when( "/devices", {
+            templateUrl: "templates/devices.html",
+            controller: "Devices"
+        } );
+
         $routeProvider.otherwise( {
             redirectTo: "/login"
         } );
@@ -23,6 +28,8 @@ angMod.config( [
 } ] );
 
 var ctlMod = angular.module( "sparkCoreBrowserApp.controllers", [] );
+
+SPARK = require( "spark" );
 
 
 ctlMod.controller( "Main", [ "$scope", "$location",
@@ -34,6 +41,10 @@ ctlMod.controller( "Main", [ "$scope", "$location",
 
         };
 
+        SPARK.on( 'login', function () {
+            $location.path( "/devices" );
+        } );
+
     } ] );
 
 
@@ -44,11 +55,20 @@ ctlMod.controller( "Login", [ "$scope", "$location",
 
         $scope.login = function () {
             if ( $scope.loginForm.$valid ) {
-                // stuffToDo
+                SPARK.login( {
+                    username: $scope.username,
+                    password: $scope.password
+                } );
             } else {
                 $scope.submitted = true;
             }
         };
+
+    } ] );
+
+
+ctlMod.controller( "Devices", [ "$scope",
+    function ( $scope ) {
 
     } ] );
 
@@ -62,3 +82,12 @@ svcMod.factory( "GUI", [ function () {
     return gui;
 
 } ] );
+
+
+// svcMod.factory( "Spark", [ function (  ) {
+
+//     var spark = require( "spark" );
+
+//     return spark;
+
+// } ] );

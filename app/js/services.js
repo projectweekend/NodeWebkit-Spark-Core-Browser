@@ -8,3 +8,12 @@ svcMod.factory( "GUI", [ function () {
     return gui;
 
 } ] );
+
+
+// svcMod.factory( "Spark", [ function (  ) {
+
+//     var spark = require( "spark" );
+
+//     return spark;
+
+// } ] );

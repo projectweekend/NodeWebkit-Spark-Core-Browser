@@ -1,5 +1,7 @@
 var ctlMod = angular.module( "sparkCoreBrowserApp.controllers", [] );
 
+SPARK = require( "spark" );
+
 
 ctlMod.controller( "Main", [ "$scope", "$location",
     function ( $scope, $location ) {
@@ -9,6 +11,10 @@ ctlMod.controller( "Main", [ "$scope", "$location",
             return view === $location.path();
 
         };
+
+        SPARK.on( 'login', function () {
+            $location.path( "/devices" );
+        } );
 
     } ] );
 
@@ -20,10 +26,19 @@ ctlMod.controller( "Login", [ "$scope", "$location",
 
         $scope.login = function () {
             if ( $scope.loginForm.$valid ) {
-                // stuffToDo
+                SPARK.login( {
+                    username: $scope.username,
+                    password: $scope.password
+                } );
             } else {
                 $scope.submitted = true;
             }
         };
+
+    } ] );
+
+
+ctlMod.controller( "Devices", [ "$scope",
+    function ( $scope ) {
 
     } ] );
