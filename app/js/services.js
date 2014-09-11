@@ -1,3 +1,5 @@
+var spark = require( "spark" );
+
 var svcMod = angular.module( "sparkCoreBrowserApp.services", [] );
 
 
@@ -10,10 +12,8 @@ svcMod.factory( "GUI", [ function () {
 } ] );
 
 
-// svcMod.factory( "Spark", [ function (  ) {
+svcMod.factory( "Spark", [ function (  ) {
 
-//     var spark = require( "spark" );
+    return spark;
 
-//     return spark;
-
-// } ] );
+} ] );
