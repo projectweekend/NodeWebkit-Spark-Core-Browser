@@ -49,6 +49,12 @@ module.exports = function( grunt ) {
                     "app/bower_components/angular-route/angular-route.min.js"
                 ],
                 dest: "app/build/angular.js"
+            },
+            jquery: {
+                src: [
+                    "app/bower_components/jquery/dist/jquery.min.js"
+                ],
+                dest: "app/build/jquery.js"
             }
         },
         cssmin: {
@@ -72,6 +78,7 @@ module.exports = function( grunt ) {
     grunt.registerTask( "default", [
         "concat:scripts",
         "concat:angular",
+        "concat:jquery",
         "cssmin:combine"
     ] );
 
