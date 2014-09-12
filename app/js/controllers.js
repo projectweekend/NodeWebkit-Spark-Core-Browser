@@ -1,7 +1,5 @@
 var ctlMod = angular.module( "sparkCoreBrowserApp.controllers", [] );
 
-SPARK = require( "spark" );
-
 
 ctlMod.controller( "Main", [ "$scope", "$location",
     function ( $scope, $location ) {
@@ -12,33 +10,16 @@ ctlMod.controller( "Main", [ "$scope", "$location",
 
         };
 
-        $scope.$on( "authenticated", function () {
-            $scope.$apply( function () {
-                $location.path( "/devices" );
-            } );
-        } );
-
     } ] );
 
 
-ctlMod.controller( "Login", [ "$scope", "$rootScope", "$location", "Spark",
-    function ( $scope, $rootScope, $location, Spark ) {
+ctlMod.controller( "Login", [ "$scope", "$rootScope", "$location",
+    function ( $scope, $rootScope, $location ) {
 
         $scope.submitted = false;
 
         $scope.login = function () {
             if ( $scope.loginForm.$valid ) {
-
-                Spark.login( {
-                    username: $scope.username,
-                    password: $scope.password
-                }, function ( err, data ) {
-                    if ( err ) {
-                        console.log( "ERROR" );
-                        return console.log( err );
-                    }
-                    $rootScope.$broadcast( "authenticated" );
-                } );
 
             } else {
 
@@ -52,18 +33,5 @@ ctlMod.controller( "Login", [ "$scope", "$rootScope", "$location", "Spark",
 
 ctlMod.controller( "Devices", [ "$scope",
     function ( $scope ) {
-
-        SPARK.listDevices( function ( err, data ) {
-
-            if ( err ) {
-                console.log( "ERROR" );
-                return console.log( err );
-            }
-
-            $scope.$apply( function () {
-                $scope.devices = data;
-            } );
-
-        } );
 
     } ] );
