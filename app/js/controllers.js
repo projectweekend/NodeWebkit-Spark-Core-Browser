@@ -13,14 +13,24 @@ ctlMod.controller( "Main", [ "$scope", "$location",
     } ] );
 
 
-ctlMod.controller( "Login", [ "$scope", "$rootScope", "$location",
-    function ( $scope, $rootScope, $location ) {
+ctlMod.controller( "Login", [ "$scope", "$rootScope", "$location", "Spark",
+    function ( $scope, $rootScope, $location, Spark ) {
 
         $scope.submitted = false;
 
         $scope.login = function () {
             if ( $scope.loginForm.$valid ) {
-
+                Spark.authenticate( {
+                    username: $scope.username,
+                    password: $scope.password
+                }, function ( err, data ) {
+                    if ( err ) {
+                        console.log( "ERROR" );
+                        console.log( err );
+                        return;
+                    }
+                    console.log( data );
+                } );
             } else {
 
                 $scope.submitted = true;
