@@ -1,12 +1,11 @@
 <div class="row">
     <div class="col-md-12">
         <div ng-repeat="d in devices" class="device">
-            <h4>{{ d.name }}</h4>
+            <h4 class="text-primary">{{ d.name }}
+                <span ng-class="d.connectedClass" class="pull-right">{{ d.connectedMessage }}</span>
+            </h4>
             <div>
                 <label>ID: </label> {{ d.id }}
-            </div>
-            <div>
-                <label>Connected: </label> {{ d.connected }}
             </div>
         </div>
     </div>

@@ -60,4 +60,20 @@ ctlMod.controller( "Login", [ "$scope", "$rootScope", "$window", "Spark",
 ctlMod.controller( "Devices", [ "$scope", "$rootScope", "Spark",
     function ( $scope, $rootScope, Spark ) {
 
+        Spark.devices( function ( err, data ) {
+            if ( err ) {
+                console.log( err );
+                return $rootScope.$broadcast( "error", {
+                    message: err.data.error_description
+                } );
+            }
+
+            for ( var d = 0; d < data.length; d++ ) {
+                data[ d ].connectedClass = data[ d ].connected ? "label label-success" : "label label-danger";
+                data[ d ].connectedMessage = data[ d ].connected ? "Connected" : "Disconnected";
+            }
+
+            $scope.devices = data;
+        } );
+
     } ] );
