@@ -1,8 +1,8 @@
 var ctlMod = angular.module( "sparkCoreBrowserApp.controllers", [] );
 
 
-ctlMod.controller( "Main", [ "$scope", "$location",
-    function ( $scope, $location ) {
+ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location",
+    function ( $scope, $rootScope, $location ) {
 
         $scope.isActiveNavItem = function ( view ) {
 
@@ -10,38 +10,54 @@ ctlMod.controller( "Main", [ "$scope", "$location",
 
         };
 
+        $scope.$on( "error", function ( e, args ) {
+
+            $scope.errorMessage = args.message;
+
+        } );
+
+        $scope.$on( "authSuccess", function () {
+
+            $location.path( "/devices" );
+
+        } );
+
     } ] );
 
 
-ctlMod.controller( "Login", [ "$scope", "$rootScope", "$location", "Spark",
-    function ( $scope, $rootScope, $location, Spark ) {
+ctlMod.controller( "Login", [ "$scope", "$rootScope", "$window", "Spark",
+    function ( $scope, $rootScope, $window, Spark ) {
 
         $scope.submitted = false;
 
+        var loginCallback = function ( err, data ) {
+
+            if ( err ) {
+                return $rootScope.$broadcast( "error", {
+                    message: err.data.error_description
+                } );
+            }
+            $window.sessionStorage.token = data.access_token;
+            return $rootScope.$broadcast( "authSuccess" );
+
+        };
+
         $scope.login = function () {
+
             if ( $scope.loginForm.$valid ) {
-                Spark.authenticate( {
+                return Spark.authenticate( {
                     username: $scope.username,
                     password: $scope.password
-                }, function ( err, data ) {
-                    if ( err ) {
-                        console.log( "ERROR" );
-                        console.log( err );
-                        return;
-                    }
-                    console.log( data );
-                } );
-            } else {
-
-                $scope.submitted = true;
-
+                }, loginCallback );
             }
+            $scope.submitted = true;
+
         };
 
     } ] );
 
 
-ctlMod.controller( "Devices", [ "$scope",
-    function ( $scope ) {
+ctlMod.controller( "Devices", [ "$scope", "$rootScope", "Spark",
+    function ( $scope, $rootScope, Spark ) {
 
     } ] );
