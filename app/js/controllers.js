@@ -69,7 +69,7 @@ ctlMod.controller( "Devices", [ "$scope", "$rootScope", "Spark",
             }
 
             for ( var d = 0; d < data.length; d++ ) {
-                data[ d ].connectedClass = data[ d ].connected ? "label label-success" : "label label-danger";
+                data[ d ].connectedClass = data[ d ].connected ? "text-success" : "text-danger";
                 data[ d ].connectedMessage = data[ d ].connected ? "Connected" : "Disconnected";
             }
 

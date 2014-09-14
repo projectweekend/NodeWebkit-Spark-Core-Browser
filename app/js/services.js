@@ -195,9 +195,13 @@ svcMod.factory( "Spark", [ "$http", "API", "Base64",
 
             } );
         },
-        devices: function ( callback ) {
+        devices: function ( id, callback ) {
 
-            return API.$get( apiBase + "/v1/devices", callback );
+            if ( typeof arguments[ 0 ] === "function"  ) {
+                return API.$get( apiBase + "/v1/devices", arguments[ 0 ] );
+            }
+
+            return API.$get( apiBase + "/v1/devices/" + id, callback );
 
         }
     };

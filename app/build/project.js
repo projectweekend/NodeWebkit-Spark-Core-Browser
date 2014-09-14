@@ -98,7 +98,7 @@ ctlMod.controller( "Devices", [ "$scope", "$rootScope", "Spark",
             }
 
             for ( var d = 0; d < data.length; d++ ) {
-                data[ d ].connectedClass = data[ d ].connected ? "label label-success" : "label label-danger";
+                data[ d ].connectedClass = data[ d ].connected ? "text-success" : "text-danger";
                 data[ d ].connectedMessage = data[ d ].connected ? "Connected" : "Disconnected";
             }
 
@@ -304,9 +304,13 @@ svcMod.factory( "Spark", [ "$http", "API", "Base64",
 
             } );
         },
-        devices: function ( callback ) {
+        devices: function ( id, callback ) {
 
-            return API.$get( apiBase + "/v1/devices", callback );
+            if ( typeof arguments[ 0 ] === "function"  ) {
+                return API.$get( apiBase + "/v1/devices", arguments[ 0 ] );
+            }
+
+            return API.$get( apiBase + "/v1/devices/" + id, callback );
 
         }
     };
