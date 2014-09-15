@@ -21,6 +21,7 @@
   ],
   "dependencies": {
     "angular": "~1.2.24",
-    "angular-route": "~1.2.24"
+    "angular-route": "~1.2.24",
+    "jquery": "~2.1.1"
   }
 }

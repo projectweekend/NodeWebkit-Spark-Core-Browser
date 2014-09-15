@@ -1,12 +1,8 @@
-<div ng-if="errorMessage.length > 0" class="row">
-    <div class="col-md-12">
-        <div id="error-alert" class="alert alert-danger">{{ errorMessage }}</div>
-    </div>
-</div>
-
-
 <form ng-submit="login()" name="loginForm" id="login" novalidate>
     <h2>Spark Login</h2>
+    <div class="error" ng-if="errorMessage.length > 0">
+        <i class="fa fa-warning"></i> {{ errorMessage }}
+    </div>
     <div class="group">
         <input ng-model="username" id="username" name="usernameField" class="block" type="text" placeholder="username" required/>
     </div>
