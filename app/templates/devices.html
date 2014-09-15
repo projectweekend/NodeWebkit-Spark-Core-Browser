@@ -1,8 +1,8 @@
 <a ng-repeat="d in devices" ng-href="#/devices/{{ d.id }}" class="device clickable">
-    <h3>{{ d.name }}
+    <h1>{{ d.name }}
         <i ng-if="d.connected" class="fa fa-wifi success"></i>
         <i ng-if="!d.connected" class="fa fa-exclamation warning"></i>
-    </h3>
+    </h1>
     <div>
         <span>{{ d.id }}</span>
     </div>
