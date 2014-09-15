@@ -196,27 +196,6 @@ svcMod.factory( "Spark", [ "$http", "API", "Base64",
 
     var apiBase = "https://api.spark.io";
 
-    var deviceFactory = function ( data ) {
-
-        var device = JSON.parse( JSON.stringify( data ) );
-
-        device.getDetail = function ( callback ) {
-            return API.$get( apiBase + "/v1/devices/" + data.id, callback );
-        };
-
-        device.readVariable = function ( name, callback ) {
-            return API.$get( apiBase + "/v1/devices/" + data.id + "/" + name, callback );
-        };
-
-        device.callFunction = function ( name, args, callback ) {
-            var url = apiBase + "/v1/devices/" + data.id + "/" + name;
-            return API.$postForm( url, { args: args }, callback );
-        };
-
-        return device;
-
-    };
-
     return {
         authenticate: function ( options, callback ) {
 
@@ -250,21 +229,21 @@ svcMod.factory( "Spark", [ "$http", "API", "Base64",
                 callback( error, null );
 
             } );
+
         },
-        devices: function ( id, callback ) {
-
-            if ( typeof arguments[ 0 ] === "function"  ) {
-                callback = arguments[ 0 ];
-                return API.$get( apiBase + "/v1/devices", function ( err, devices ) {
-                    if ( err ) {
-                        return callback( err );
-                    }
-                    return callback( null, devices.map( deviceFactory ) );
-                } );
-            }
-
+        listDevices: function ( callback ) {
+            return API.$get( apiBase + "/v1/devices", callback );
+        },
+        readDetail: function ( id, callback ) {
             return API.$get( apiBase + "/v1/devices/" + id, callback );
-
+        },
+        readVariable: function ( options, callback ) {
+            var url = apiBase + "/v1/devices/" + options.id + "/" + options.name;
+            return API.$get( url, callback );
+        },
+        callFunction: function ( options, callback ) {
+            var url = apiBase + "/v1/devices/" + options.id + "/" + options.name;
+            return API.$postForm( url, { args: options.args }, callback );
         }
     };
 

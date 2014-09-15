@@ -56,16 +56,15 @@ ctlMod.controller( "Login", [ "$scope", "$rootScope", "$window", "Spark",
     } ] );
 
 
-ctlMod.controller( "Devices", [ "$rootScope", "Spark", "Error",
-    function ( $rootScope, Spark, Error ) {
+ctlMod.controller( "Devices", [ "$scope", "Spark", "Error",
+    function ( $scope, Spark, Error ) {
 
-        Spark.devices( function ( err, data ) {
+        Spark.listDevices( function ( err, data ) {
             if ( err ) {
                 return Error( err );
             }
 
-            $rootScope.devices = data;
-            console.log( $rootScope.devices );
+            $scope.devices = data;
 
         } );
 
