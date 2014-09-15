@@ -1,13 +1,9 @@
-<div class="row">
-    <div class="col-md-12">
-        <div ng-repeat="d in devices" class="device">
-            <h2>{{ d.name }}
-                <small ng-class="d.connectedClass">{{ d.connectedMessage }}</small>
-            </h2>
-            <div>
-                <label>ID: </label>
-                <span>{{ d.id }}</span>
-            </div>
-        </div>
+<a ng-repeat="d in devices" ng-href="#/devices/{{ d.id }}" class="device clickable">
+    <h3>{{ d.name }}
+        <i ng-if="d.connected" class="fa fa-wifi success"></i>
+        <i ng-if="!d.connected" class="fa fa-exclamation warning"></i>
+    </h3>
+    <div>
+        <span>{{ d.id }}</span>
     </div>
-</div>
+</a>

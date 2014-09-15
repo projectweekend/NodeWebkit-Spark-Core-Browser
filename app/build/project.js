@@ -96,11 +96,6 @@ ctlMod.controller( "Devices", [ "$scope", "$rootScope", "Spark",
                 } );
             }
 
-            for ( var d = 0; d < data.length; d++ ) {
-                data[ d ].connectedClass = data[ d ].connected ? "text-success" : "text-danger";
-                data[ d ].connectedMessage = data[ d ].connected ? "Connected" : "Disconnected";
-            }
-
             $scope.devices = data;
         } );
 
