@@ -34,8 +34,3 @@ body {
     text-decoration: none;
     color: black;
 }
-
-.device:hover {
-    background: green;
-    color: white;
-}
