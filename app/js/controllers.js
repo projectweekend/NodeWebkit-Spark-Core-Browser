@@ -56,7 +56,7 @@ ctlMod.controller( "Login", [ "$scope", "$rootScope", "$window", "Spark",
     } ] );
 
 
-ctlMod.controller( "Devices", [ "$scope", "Spark", "Error",
+ctlMod.controller( "DevicesList", [ "$scope", "Spark", "Error",
     function ( $scope, Spark, Error ) {
 
         Spark.listDevices( function ( err, data ) {
@@ -67,5 +67,13 @@ ctlMod.controller( "Devices", [ "$scope", "Spark", "Error",
             $scope.devices = data;
 
         } );
+
+    } ] );
+
+
+ctlMod.controller( "DevicesDetail", [ "$scope", "$routeParams", "Spark", "Error",
+    function ( $scope, $routeParams, Spark, Error ) {
+
+        $scope.deviceId = $routeParams.deviceId;
 
     } ] );

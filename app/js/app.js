@@ -17,8 +17,13 @@ angMod.config( [
         } );
 
         $routeProvider.when( "/devices", {
-            templateUrl: "templates/devices.html",
-            controller: "Devices"
+            templateUrl: "templates/devices-list.html",
+            controller: "DevicesList"
+        } );
+
+        $routeProvider.when( "/devices/:deviceId", {
+            templateUrl: "templates/devices-detail.html",
+            controller: "DevicesDetail"
         } );
 
         $routeProvider.otherwise( {
