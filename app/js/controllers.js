@@ -66,6 +66,7 @@ ctlMod.controller( "Devices", [ "$scope", "Spark", "Error",
 
             $scope.devices = data;
             console.log( $scope.devices );
+
         } );
 
     } ] );

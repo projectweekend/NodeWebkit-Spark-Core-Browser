@@ -111,6 +111,20 @@ svcMod.factory( 'Base64', function () {
 
 svcMod.factory( 'API', [ "$http", "$window", function ( $http, $window ) {
 
+    var makeRequest = function ( options, callback ) {
+        $http( options )
+            .success( function ( data, status, headers, config ) {
+                callback( null, data );
+            } )
+            .error( function ( data, status, headers, config ) {
+                var error = {
+                    data: data,
+                    status: status
+                };
+                callback( error, null );
+            } );
+    };
+
     var apiRequest = function ( method, path, requestData, callback ) {
 
         var headers = {
@@ -128,22 +142,28 @@ svcMod.factory( 'API', [ "$http", "$window", function ( $http, $window ) {
             data: requestData
         };
 
-        $http( options )
-            .success( function ( data, status, headers, config ) {
+        return makeRequest( options, callback );
 
-                callback( null, data );
+    };
 
-            } )
-            .error( function ( data, status, headers, config ) {
+    var formRequest = function ( method, path, requestData, callback ) {
 
-                var error = {
-                    data: data,
-                    status: status
-                };
+        var headers = {
+            "Content-Type": "application/x-www-form-urlencoded"
+        };
 
-                callback( error, null );
+        if ( $window.sessionStorage.token ) {
+            headers.Authorization = "Bearer " + $window.sessionStorage.token;
+        }
 
-            } );
+        var options = {
+            method: method,
+            url: path,
+            headers: headers,
+            data: $.param( requestData )
+        };
+
+        return makeRequest( options, callback );
 
     };
 
@@ -162,6 +182,9 @@ svcMod.factory( 'API', [ "$http", "$window", function ( $http, $window ) {
         },
         $delete: function ( path, callback ) {
             return apiRequest( 'DELETE', path, {}, callback );
+        },
+        $postForm: function ( path, requestData, callback ) {
+            return formRequest( 'POST', path, requestData, callback );
         }
     };
 
@@ -175,16 +198,19 @@ svcMod.factory( "Spark", [ "$http", "API", "Base64",
 
     var deviceFactory = function ( data ) {
 
-        var device = {
-            id: data.id,
-            name: data.name,
-            connected: data.connected,
-            lastApp: data.last_app,
-            lastHeard: data.last_heard
-        };
+        var device = JSON.parse( JSON.stringify( data ) );
 
         device.getDetail = function ( callback ) {
             return API.$get( apiBase + "/v1/devices/" + data.id, callback );
+        };
+
+        device.readVariable = function ( name, callback ) {
+            return API.$get( apiBase + "/v1/devices/" + data.id + "/" + name, callback );
+        };
+
+        device.callFunction = function ( name, args, callback ) {
+            var url = apiBase + "/v1/devices/" + data.id + "/" + name;
+            return API.$postForm( url, { args: args }, callback );
         };
 
         return device;
