@@ -85,18 +85,16 @@ ctlMod.controller( "Login", [ "$scope", "$rootScope", "$window", "Spark",
     } ] );
 
 
-ctlMod.controller( "Devices", [ "$scope", "$rootScope", "Spark",
-    function ( $scope, $rootScope, Spark ) {
+ctlMod.controller( "Devices", [ "$scope", "Spark", "Error",
+    function ( $scope, Spark, Error ) {
 
         Spark.devices( function ( err, data ) {
             if ( err ) {
-                console.log( err );
-                return $rootScope.$broadcast( "error", {
-                    message: err.data.error_description
-                } );
+                return Error( err );
             }
 
             $scope.devices = data;
+            console.log( $scope.devices );
         } );
 
     } ] );
@@ -109,6 +107,18 @@ svcMod.factory( "GUI", [ function () {
     var gui = require('nw.gui');
 
     return gui;
+
+} ] );
+
+
+svcMod.factory( "Error", [ "$rootScope", function ( $rootScope ) {
+
+    return function ( err ) {
+        console.log( err );
+        return $rootScope.$broadcast( "error", {
+            message: err.data.error_description
+        } );
+    };
 
 } ] );
 
@@ -264,6 +274,24 @@ svcMod.factory( "Spark", [ "$http", "API", "Base64",
 
     var apiBase = "https://api.spark.io";
 
+    var deviceFactory = function ( data ) {
+
+        var device = {
+            id: data.id,
+            name: data.name,
+            connected: data.connected,
+            lastApp: data.last_app,
+            lastHeard: data.last_heard
+        };
+
+        device.getDetail = function ( callback ) {
+            return API.$get( apiBase + "/v1/devices/" + data.id, callback );
+        };
+
+        return device;
+
+    };
+
     return {
         authenticate: function ( options, callback ) {
 
@@ -301,7 +329,13 @@ svcMod.factory( "Spark", [ "$http", "API", "Base64",
         devices: function ( id, callback ) {
 
             if ( typeof arguments[ 0 ] === "function"  ) {
-                return API.$get( apiBase + "/v1/devices", arguments[ 0 ] );
+                callback = arguments[ 0 ];
+                return API.$get( apiBase + "/v1/devices", function ( err, devices ) {
+                    if ( err ) {
+                        return callback( err );
+                    }
+                    return callback( null, devices.map( deviceFactory ) );
+                } );
             }
 
             return API.$get( apiBase + "/v1/devices/" + id, callback );
