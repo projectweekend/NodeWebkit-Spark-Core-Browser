@@ -1,3 +1,50 @@
+body {
+    font-family: sans-serif;
+}
+
+#login {
+    width: 300px;
+    height: 250px;
+    margin: 175px 150px;
+}
+
+form > .group {
+    margin-bottom: 20px;
+}
+
+input {
+    border: 1px solid black;
+    padding: 0 10px;
+    height: 30px;
+    line-height: 1.5;
+}
+
+input:focus {
+    outline: none;
+    border: none;
+    background: black;
+    color: white;
+}
+
+button {
+    background-color: white;
+    border: 1px solid black;
+    height: 30px;
+}
+
+button:active {
+    background-color: black;
+    color: white;
+}
+
+button:focus {
+    outline: none;
+}
+
+.block {
+    width: 100%;
+}
+
 #error-alert {
     margin-top: 15px;
 }

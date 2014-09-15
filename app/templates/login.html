@@ -4,21 +4,16 @@
     </div>
 </div>
 
-<div class="row">
-    <form ng-submit="login()" class="col-md-12" name="loginForm" id="login" novalidate>
-        <h2>Spark Login</h2>
-        <div class="form-group form-group-lg">
-            <label for="username">Username</label>
-            <input ng-model="username" id="username" name="usernameField" class="form-control" type="text" required/>
-            <span ng-if="submitted && loginForm.usernameField.$error.required" class="text-danger">Username is required</span>
-        </div>
-        <div class="form-group form-group-lg">
-            <label for="password">Password</label>
-            <input ng-model="password" id="password" name="passwordField" class="form-control" type="password" required/>
-            <span ng-if="submitted && loginForm.passwordField.$error.required" class="text-danger">Password is required</span>
-        </div>
-        <div class="form-group">
-            <button class="btn btn-block btn-primary" type="submit">Login</button>
-        </div>
-    </form>
-</div>
+
+<form ng-submit="login()" name="loginForm" id="login" novalidate>
+    <h2>Spark Login</h2>
+    <div class="group">
+        <input ng-model="username" id="username" name="usernameField" class="block" type="text" placeholder="username" required/>
+    </div>
+    <div class="group">
+        <input ng-model="password" id="password" name="passwordField" class="block" type="password" placeholder="password" required/>
+    </div>
+    <div class="group">
+        <button id="login-button" class="block" type="submit">Login</button>
+    </div>
+</form>

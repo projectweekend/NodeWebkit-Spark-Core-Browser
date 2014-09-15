@@ -79,7 +79,6 @@ ctlMod.controller( "Login", [ "$scope", "$rootScope", "$window", "Spark",
                     password: $scope.password
                 }, loginCallback );
             }
-            $scope.submitted = true;
 
         };
 
