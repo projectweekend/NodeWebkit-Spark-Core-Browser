@@ -62,8 +62,7 @@ module.exports = function( grunt ) {
                 files: {
                     "app/build/style.css": [
                         "app/bower_components/fontawesome/css/font-awesome.min.css",
-                        "app/bower_components/bootstrap/dist/css/bootstrap.min.css",
-                        "app/css/custom.css"
+                        "app/css/*.css"
                     ]
                 }
             }
