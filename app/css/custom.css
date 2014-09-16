@@ -7,8 +7,16 @@ body {
     width: 100%;
 }
 
-.quarter {
+.one-quarter {
     width: 25%;
+}
+
+.one-third {
+    width: 33%;
+}
+
+.one-half {
+    width: 50%;
 }
 
 .three-quarters {
@@ -83,7 +91,7 @@ body {
 }
 
 .device-function-item > button {
-    width: 23%;
+    width: 22%;
 }
 
 .status-icon {

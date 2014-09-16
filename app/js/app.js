@@ -1,6 +1,9 @@
 var angMod = angular.module( "sparkCoreBrowserApp", [
     "ngRoute",
-    "sparkCoreBrowserApp.controllers",
+    "sparkCoreBrowserApp.controller-main",
+    "sparkCoreBrowserApp.controller-login",
+    "sparkCoreBrowserApp.controller-devices-list",
+    "sparkCoreBrowserApp.controller-devices-detail",
     "sparkCoreBrowserApp.services"
 ] );
 

@@ -1,6 +1,9 @@
 var angMod = angular.module( "sparkCoreBrowserApp", [
     "ngRoute",
-    "sparkCoreBrowserApp.controllers",
+    "sparkCoreBrowserApp.controller-main",
+    "sparkCoreBrowserApp.controller-login",
+    "sparkCoreBrowserApp.controller-devices-list",
+    "sparkCoreBrowserApp.controller-devices-detail",
     "sparkCoreBrowserApp.services"
 ] );
 
@@ -32,7 +35,110 @@ angMod.config( [
 
 } ] );
 
-var ctlMod = angular.module( "sparkCoreBrowserApp.controllers", [] );
+var ctlMod = angular.module( "sparkCoreBrowserApp.controller-devices-detail", [] );
+
+
+ctlMod.controller( "DevicesDetail", [ "$scope", "$routeParams", "Spark", "Error",
+    function ( $scope, $routeParams, Spark, Error ) {
+
+        $scope.deviceVariables = [];
+        $scope.deviceFunctions = [];
+
+        $scope.call = function ( device ) {
+
+            console.log( device );
+            console.log( $routeParams.deviceId );
+
+            Spark.callFunction( {
+                id: $routeParams.deviceId,
+                name: device.name,
+                argsName: device.argsName,
+                argsValue: device.argsValue
+            }, function ( err, data ) {
+                if ( err ) {
+                    console.log( err );
+                    return Error( err );
+                }
+                console.log( data );
+                $scope.$broadcast( "callSuccess" );
+            } );
+        };
+
+        Spark.readDetail( $routeParams.deviceId, function ( err, data ) {
+
+            if ( err ) {
+                return Error( err );
+            }
+
+            for ( var v in data.variables ) {
+                if ( data.variables.hasOwnProperty( v ) ) {
+                    $scope.deviceVariables.push( v );
+                }
+            }
+
+            for ( var f = 0; f < data.functions.length; f++ ) {
+                $scope.deviceFunctions.push( {
+                    name: data.functions[ f ],
+                    argsName: "",
+                    argsValue: ""
+                } );
+            }
+
+            $scope.device = data;
+
+        } );
+
+    } ] );
+
+var ctlMod = angular.module( "sparkCoreBrowserApp.controller-devices-list", [] );
+
+
+ctlMod.controller( "DevicesList", [ "$scope", "Spark", "Error",
+    function ( $scope, Spark, Error ) {
+
+        Spark.listDevices( function ( err, data ) {
+            if ( err ) {
+                return Error( err );
+            }
+            $scope.devices = data;
+        } );
+
+    } ] );
+
+var ctlMod = angular.module( "sparkCoreBrowserApp.controller-login", [] );
+
+
+ctlMod.controller( "Login", [ "$scope", "$rootScope", "$window", "Spark",
+    function ( $scope, $rootScope, $window, Spark ) {
+
+        $scope.submitted = false;
+
+        var loginCallback = function ( err, data ) {
+
+            if ( err ) {
+                return $rootScope.$broadcast( "error", {
+                    message: err.data.error_description
+                } );
+            }
+            $window.sessionStorage.token = data.access_token;
+            return $rootScope.$broadcast( "authSuccess" );
+
+        };
+
+        $scope.login = function () {
+
+            if ( $scope.loginForm.$valid ) {
+                return Spark.authenticate( {
+                    username: $scope.username,
+                    password: $scope.password
+                }, loginCallback );
+            }
+
+        };
+
+    } ] );
+
+var ctlMod = angular.module( "sparkCoreBrowserApp.controller-main", [] );
 
 
 ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout",
@@ -68,105 +174,24 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout",
 
     } ] );
 
-
-ctlMod.controller( "Login", [ "$scope", "$rootScope", "$window", "Spark",
-    function ( $scope, $rootScope, $window, Spark ) {
-
-        $scope.submitted = false;
-
-        var loginCallback = function ( err, data ) {
-
-            if ( err ) {
-                return $rootScope.$broadcast( "error", {
-                    message: err.data.error_description
-                } );
-            }
-            $window.sessionStorage.token = data.access_token;
-            return $rootScope.$broadcast( "authSuccess" );
-
-        };
-
-        $scope.login = function () {
-
-            if ( $scope.loginForm.$valid ) {
-                return Spark.authenticate( {
-                    username: $scope.username,
-                    password: $scope.password
-                }, loginCallback );
-            }
-
-        };
-
-    } ] );
-
-
-ctlMod.controller( "DevicesList", [ "$scope", "Spark", "Error",
-    function ( $scope, Spark, Error ) {
-
-        Spark.listDevices( function ( err, data ) {
-            if ( err ) {
-                return Error( err );
-            }
-            $scope.devices = data;
-        } );
-
-    } ] );
-
-
-ctlMod.controller( "DevicesDetail", [ "$scope", "$routeParams", "Spark", "Error",
-    function ( $scope, $routeParams, Spark, Error ) {
-
-        $scope.deviceVariables = [];
-        $scope.deviceFunctions = [];
-
-        $scope.call = function ( device ) {
-            Spark.callFunction( {
-                id: $routeParams.deviceId,
-                name: device.name,
-                args: device.args
-            }, function ( err, data ) {
-                if ( err ) {
-                    return Error( err );
-                }
-                $scope.$broadcast( "callSuccess" );
-            } );
-        };
-
-        Spark.readDetail( $routeParams.deviceId, function ( err, data ) {
-
-            if ( err ) {
-                return Error( err );
-            }
-
-            for ( var v in data.variables ) {
-                if ( data.variables.hasOwnProperty( v ) ) {
-                    $scope.deviceVariables.push( v );
-                }
-            }
-
-            for ( var f = 0; f < data.functions.length; f++ ) {
-                $scope.deviceFunctions.push( {
-                    name: data.functions[ f ],
-                    args: ""
-                } );
-            }
-
-            $scope.device = data;
-
-        } );
-
-    } ] );
+var gui = require( "nw.gui" );
 
 var svcMod = angular.module( "sparkCoreBrowserApp.services", [] );
 
 
-svcMod.factory( "GUI", [ function () {
+win = gui.Window.get();
+var nativeMenuBar = new gui.Menu( { type: "menubar" } );
+nativeMenuBar.createMacBuiltin( "Spark Manager" );
+win.menu = nativeMenuBar;
 
-    var gui = require('nw.gui');
+
+svcMod.factory( "GUI", [ function () {
 
     return gui;
 
 } ] );
+
+var svcMod = angular.module( "sparkCoreBrowserApp.services", [] );
 
 
 svcMod.factory( "Error", [ "$rootScope", function ( $rootScope ) {
@@ -402,7 +427,9 @@ svcMod.factory( "Spark", [ "$http", "API", "Base64",
         },
         callFunction: function ( options, callback ) {
             var url = apiBase + "/v1/devices/" + options.id + "/" + options.name;
-            return API.$postForm( url, { args: options.args }, callback );
+            var postData = {};
+            postData[ options.argsName ] = options.argsValue;
+            return API.$postForm( url, postData, callback );
         }
     };
 

@@ -1,15 +1,6 @@
 var svcMod = angular.module( "sparkCoreBrowserApp.services", [] );
 
 
-svcMod.factory( "GUI", [ function () {
-
-    var gui = require('nw.gui');
-
-    return gui;
-
-} ] );
-
-
 svcMod.factory( "Error", [ "$rootScope", function ( $rootScope ) {
 
     return function ( err ) {
@@ -243,7 +234,9 @@ svcMod.factory( "Spark", [ "$http", "API", "Base64",
         },
         callFunction: function ( options, callback ) {
             var url = apiBase + "/v1/devices/" + options.id + "/" + options.name;
-            return API.$postForm( url, { args: options.args }, callback );
+            var postData = {};
+            postData[ options.argsName ] = options.argsValue;
+            return API.$postForm( url, postData, callback );
         }
     };
 
