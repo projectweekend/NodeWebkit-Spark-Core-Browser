@@ -7,6 +7,14 @@ body {
     width: 100%;
 }
 
+.quarter {
+    width: 25%;
+}
+
+.three-quarters {
+    width: 75%;
+}
+
 .success {
     color: green;
 }
@@ -19,10 +27,14 @@ body {
     cursor: pointer;
 }
 
+.label {
+    font-weight: bold;
+}
+
 #login {
-    width: 300px;
+    width: 250px;
     height: 250px;
-    margin: 175px 150px;
+    margin: 125px 75px;
 }
 
 .device {
@@ -33,13 +45,56 @@ body {
     text-decoration: none;
     color: black;
     border-bottom: 1px solid black;
+    transition: all 0.3s ease-in-out;
+}
+
+.device.clickable:hover {
+    background: black;
+    color: white;
+}
+
+.device.clickable:hover i {
+    color: white;
+}
+
+.device > h1 {
+    font-size: 1.75em;
+}
+
+.device-detail-item {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.device-variables,
+.device-functions {
+    margin-top: 35px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.device-function-item {
+    box-sizing: border-box;
+}
+
+.device-function-item > label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.device-function-item > button {
+    width: 23%;
 }
 
 .status-icon {
     position: absolute;
-    top: 20px;
-    right: 25px;
+    top: 15px;
+    right: 20px;
     width: 75px;
     height: 60px;
     text-align: center;
+}
+
+.no-border {
+    border: none;
 }

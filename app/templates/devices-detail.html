@@ -1,1 +1,28 @@
-<div>DEVICE DETAIL {{ deviceId }}</div>
+<div class="device no-border">
+    <h1>{{ device.name }}</h1>
+    <i ng-if="device.connected" class="fa fa-wifi fa-4x success status-icon"></i>
+    <i ng-if="!device.connected" class="fa fa-exclamation fa-4x warning status-icon"></i>
+</div>
+
+<div class="device-detail-item">
+    <span class="label">ID: </span>
+    <span class="value">{{ device.id }}</span>
+</div>
+
+<div class="device-detail-item">
+    <span class="label">CC3000: </span>
+    <span class="value">v{{ device.cc3000_patch_version }}</span>
+</div>
+
+<div ng-if="deviceVariables.length > 0" class="device-variables">
+    <h3>Variables</h3>
+</div>
+
+<div ng-if="deviceFunctions.length > 0" class="device-functions">
+    <h3>Functions</h3>
+    <form ng-repeat="f in deviceFunctions" class="device-function-item" submit="call( f )">
+        <label class="label">{{ f.name }}:</label>
+        <input ng-model="f.args" class="three-quarters" type="text" placeholder="param1,param2,param3" required/>
+        <button type="submit">Call</button>
+    </form>
+</div>
