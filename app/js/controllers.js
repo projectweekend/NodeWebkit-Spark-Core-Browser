@@ -1,8 +1,8 @@
 var ctlMod = angular.module( "sparkCoreBrowserApp.controllers", [] );
 
 
-ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location",
-    function ( $scope, $rootScope, $location ) {
+ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout",
+    function ( $scope, $rootScope, $location, $timeout ) {
 
         $scope.isActiveNavItem = function ( view ) {
 
@@ -19,6 +19,16 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location",
         $scope.$on( "authSuccess", function () {
 
             $location.path( "/devices" );
+
+        } );
+
+        $scope.$on( "callSuccess", function () {
+
+            $scope.callSuccess = true;
+
+            $timeout( function ( ) {
+                $scope.callSuccess = false;
+            }, 2000 );
 
         } );
 
@@ -63,9 +73,7 @@ ctlMod.controller( "DevicesList", [ "$scope", "Spark", "Error",
             if ( err ) {
                 return Error( err );
             }
-
             $scope.devices = data;
-
         } );
 
     } ] );
@@ -74,6 +82,43 @@ ctlMod.controller( "DevicesList", [ "$scope", "Spark", "Error",
 ctlMod.controller( "DevicesDetail", [ "$scope", "$routeParams", "Spark", "Error",
     function ( $scope, $routeParams, Spark, Error ) {
 
-        $scope.deviceId = $routeParams.deviceId;
+        $scope.deviceVariables = [];
+        $scope.deviceFunctions = [];
+
+        $scope.call = function ( device ) {
+            Spark.callFunction( {
+                id: $routeParams.deviceId,
+                name: device.name,
+                args: device.args
+            }, function ( err, data ) {
+                if ( err ) {
+                    return Error( err );
+                }
+                $scope.$broadcast( "callSuccess" );
+            } );
+        };
+
+        Spark.readDetail( $routeParams.deviceId, function ( err, data ) {
+
+            if ( err ) {
+                return Error( err );
+            }
+
+            for ( var v in data.variables ) {
+                if ( data.variables.hasOwnProperty( v ) ) {
+                    $scope.deviceVariables.push( v );
+                }
+            }
+
+            for ( var f = 0; f < data.functions.length; f++ ) {
+                $scope.deviceFunctions.push( {
+                    name: data.functions[ f ],
+                    args: ""
+                } );
+            }
+
+            $scope.device = data;
+
+        } );
 
     } ] );
