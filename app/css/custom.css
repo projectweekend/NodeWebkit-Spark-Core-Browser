@@ -27,9 +27,19 @@ body {
 
 .device {
     box-sizing: border-box;
+    position: relative;
     display: block;
-    padding: 15px;
-    margin-bottom: 15px;
+    padding: 10px 20px;
     text-decoration: none;
     color: black;
+    border-bottom: 1px solid black;
+}
+
+.status-icon {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    width: 75px;
+    height: 60px;
+    text-align: center;
 }
