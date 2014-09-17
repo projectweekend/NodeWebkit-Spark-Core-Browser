@@ -1,8 +1,8 @@
 var ctlMod = angular.module( "sparkCoreBrowserApp.controller-devices-detail", [] );
 
 
-ctlMod.controller( "DevicesDetail", [ "$scope", "$rootScope", "$routeParams", "Spark", "Error",
-    function ( $scope, $rootScope, $routeParams, Spark, Error ) {
+ctlMod.controller( "DevicesDetail", [ "$scope", "$rootScope", "$routeParams", "$interval", "Spark", "Error",
+    function ( $scope, $rootScope, $routeParams, $interval, Spark, Error ) {
 
         $scope.deviceVariables = [];
         $scope.deviceFunctions = [];
@@ -25,6 +25,31 @@ ctlMod.controller( "DevicesDetail", [ "$scope", "$rootScope", "$routeParams", "S
             } );
         };
 
+        var makeVariable = function ( name ) {
+
+            var variable = {
+                name: name,
+                value: "",
+                refresh: function () {
+                    var self = this;
+                    Spark.readVariable( {
+                        id: $routeParams.deviceId,
+                        name: self.name
+                    }, function ( err, data ) {
+                        self.value = data.result;
+                    } );
+                }
+            };
+
+            return variable;
+        };
+
+        var refreshVariables = function () {
+            $scope.deviceVariables.map( function ( variable ) {
+                variable.refresh();
+            } );
+        };
+
         Spark.readDetail( $routeParams.deviceId, function ( err, data ) {
 
             if ( err ) {
@@ -33,7 +58,7 @@ ctlMod.controller( "DevicesDetail", [ "$scope", "$rootScope", "$routeParams", "S
 
             for ( var v in data.variables ) {
                 if ( data.variables.hasOwnProperty( v ) ) {
-                    $scope.deviceVariables.push( v );
+                    $scope.deviceVariables.push( makeVariable( v ) );
                 }
             }
 
@@ -46,6 +71,9 @@ ctlMod.controller( "DevicesDetail", [ "$scope", "$rootScope", "$routeParams", "S
             }
 
             $scope.device = data;
+
+            refreshVariables();
+            $interval( refreshVariables, 10000 );
 
         } );
 
