@@ -83,6 +83,7 @@ body {
 
 .device-function-item {
     box-sizing: border-box;
+    position: relative;
 }
 
 .device-function-item > label {
@@ -92,6 +93,12 @@ body {
 
 .device-function-item > button {
     width: 22%;
+}
+
+.call-feedback {
+    display: inline-block;
+    width: 22%;
+    text-align: center;
 }
 
 .status-icon {

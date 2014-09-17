@@ -24,6 +24,8 @@
         <label class="label">{{ f.name }}:</label>
         <input ng-model="f.argsName" class="one-quarter" type="text" placeholder="paramName" required/>
         <input ng-model="f.argsValue" class="one-half" type="text" placeholder="param1,param2,param3" required/>
-        <button type="submit">Call</button>
+        <button ng-if="!callRunning && !callSuccess" type="submit">Call</button>
+        <span ng-if="callRunning" class="call-feedback working">Working...</span>
+        <span ng-if="!callRunning && callSuccess" class="call-feedback success">Done!</span>
     </form>
 </div>
