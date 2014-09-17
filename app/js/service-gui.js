@@ -1,6 +1,6 @@
 var gui = require( "nw.gui" );
 
-var svcMod = angular.module( "sparkCoreBrowserApp.services", [] );
+var svcMod = angular.module( "sparkCoreBrowserApp.service-gui", [] );
 
 
 win = gui.Window.get();

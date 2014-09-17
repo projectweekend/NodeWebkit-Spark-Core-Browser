@@ -4,7 +4,9 @@ var angMod = angular.module( "sparkCoreBrowserApp", [
     "sparkCoreBrowserApp.controller-login",
     "sparkCoreBrowserApp.controller-devices-list",
     "sparkCoreBrowserApp.controller-devices-detail",
-    "sparkCoreBrowserApp.services"
+    "sparkCoreBrowserApp.service-error",
+    "sparkCoreBrowserApp.service-spark-core",
+    "sparkCoreBrowserApp.service-gui"
 ] );
 
 
@@ -212,9 +214,23 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout",
 
     } ] );
 
+var svcMod = angular.module( "sparkCoreBrowserApp.service-error", [] );
+
+
+svcMod.factory( "Error", [ "$rootScope", function ( $rootScope ) {
+
+    return function ( err ) {
+        console.log( err );
+        return $rootScope.$broadcast( "error", {
+            message: err.data.error_description
+        } );
+    };
+
+} ] );
+
 var gui = require( "nw.gui" );
 
-var svcMod = angular.module( "sparkCoreBrowserApp.services", [] );
+var svcMod = angular.module( "sparkCoreBrowserApp.service-gui", [] );
 
 
 win = gui.Window.get();
@@ -229,19 +245,7 @@ svcMod.factory( "GUI", [ function () {
 
 } ] );
 
-var svcMod = angular.module( "sparkCoreBrowserApp.services", [] );
-
-
-svcMod.factory( "Error", [ "$rootScope", function ( $rootScope ) {
-
-    return function ( err ) {
-        console.log( err );
-        return $rootScope.$broadcast( "error", {
-            message: err.data.error_description
-        } );
-    };
-
-} ] );
+var svcMod = angular.module( "sparkCoreBrowserApp.service-spark-core", [] );
 
 
 svcMod.factory( 'Base64', function () {

@@ -4,7 +4,9 @@ var angMod = angular.module( "sparkCoreBrowserApp", [
     "sparkCoreBrowserApp.controller-login",
     "sparkCoreBrowserApp.controller-devices-list",
     "sparkCoreBrowserApp.controller-devices-detail",
-    "sparkCoreBrowserApp.services"
+    "sparkCoreBrowserApp.service-error",
+    "sparkCoreBrowserApp.service-spark-core",
+    "sparkCoreBrowserApp.service-gui"
 ] );
 
 

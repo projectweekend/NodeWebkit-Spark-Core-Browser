@@ -1,16 +1,4 @@
-var svcMod = angular.module( "sparkCoreBrowserApp.services", [] );
-
-
-svcMod.factory( "Error", [ "$rootScope", function ( $rootScope ) {
-
-    return function ( err ) {
-        console.log( err );
-        return $rootScope.$broadcast( "error", {
-            message: err.data.error_description
-        } );
-    };
-
-} ] );
+var svcMod = angular.module( "sparkCoreBrowserApp.service-spark-core", [] );
 
 
 svcMod.factory( 'Base64', function () {
