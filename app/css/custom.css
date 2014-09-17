@@ -1,42 +1,7 @@
+
 body {
     font-family: sans-serif;
     margin: 0;
-}
-
-.block {
-    width: 100%;
-}
-
-.one-quarter {
-    width: 25%;
-}
-
-.one-third {
-    width: 33%;
-}
-
-.one-half {
-    width: 50%;
-}
-
-.three-quarters {
-    width: 75%;
-}
-
-.success {
-    color: green;
-}
-
-.warning {
-    color: red;
-}
-
-.clickable {
-    cursor: pointer;
-}
-
-.label {
-    font-weight: bold;
 }
 
 #login {
@@ -44,6 +9,7 @@ body {
     height: 250px;
     margin: 125px 75px;
 }
+
 
 .device {
     box-sizing: border-box;
@@ -56,23 +22,78 @@ body {
     transition: all 0.3s ease-in-out;
 }
 
+
+.block {
+    width: 100%;
+}
+
+
+.one-quarter {
+    width: 25%;
+}
+
+
+.one-third {
+    width: 33%;
+}
+
+
+.one-half {
+    width: 50%;
+}
+
+
+.three-quarters {
+    width: 75%;
+}
+
+
+.success {
+    color: green;
+}
+
+
+.warning {
+    color: red;
+}
+
+
+.clickable {
+    cursor: pointer;
+}
+
+
+.label {
+    font-weight: bold;
+}
+
+
+.no-border {
+    border: none;
+}
+
+
 .device.clickable:hover {
     background: black;
     color: white;
 }
 
+
 .device.clickable:hover i {
     color: white;
 }
+
 
 .device > h1 {
     font-size: 1.75em;
 }
 
+
 .device-detail-item {
     padding-left: 20px;
     padding-right: 20px;
 }
+
 
 .device-variables,
 .device-functions {
@@ -81,25 +102,35 @@ body {
     padding-right: 20px;
 }
 
+
+.device-function-item > button,
+.device-variable-item > button {
+    width: 22%;
+}
+
+
 .device-function-item {
     box-sizing: border-box;
     position: relative;
 }
+
 
 .device-function-item > label {
     display: block;
     margin-bottom: 5px;
 }
 
-.device-function-item > button {
-    width: 22%;
+.device-variable-item > span {
+    display: inline-block;
 }
+
 
 .call-feedback {
     display: inline-block;
     width: 22%;
     text-align: center;
 }
+
 
 .status-icon {
     position: absolute;
@@ -108,8 +139,4 @@ body {
     width: 75px;
     height: 60px;
     text-align: center;
-}
-
-.no-border {
-    border: none;
 }

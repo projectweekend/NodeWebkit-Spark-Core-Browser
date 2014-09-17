@@ -16,6 +16,10 @@
 
 <div ng-if="deviceVariables.length > 0" class="device-variables">
     <h3>Variables</h3>
+    <div ng-repeat="v in deviceVariables" class="device-variable-item">
+        <label class="label one-quarter">{{ v.name }}: </label>
+        <span class="three-quarters">{{ v.value }}</span>
+    </div>
 </div>
 
 <div ng-if="deviceFunctions.length > 0" class="device-functions">
