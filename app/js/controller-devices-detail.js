@@ -1,16 +1,15 @@
 var ctlMod = angular.module( "sparkCoreBrowserApp.controller-devices-detail", [] );
 
 
-ctlMod.controller( "DevicesDetail", [ "$scope", "$routeParams", "Spark", "Error",
-    function ( $scope, $routeParams, Spark, Error ) {
+ctlMod.controller( "DevicesDetail", [ "$scope", "$rootScope", "$routeParams", "Spark", "Error",
+    function ( $scope, $rootScope, $routeParams, Spark, Error ) {
 
         $scope.deviceVariables = [];
         $scope.deviceFunctions = [];
 
         $scope.call = function ( device ) {
 
-            console.log( device );
-            console.log( $routeParams.deviceId );
+            $rootScope.$broadcast( "callRunning" );
 
             Spark.callFunction( {
                 id: $routeParams.deviceId,
@@ -22,8 +21,7 @@ ctlMod.controller( "DevicesDetail", [ "$scope", "$routeParams", "Spark", "Error"
                     console.log( err );
                     return Error( err );
                 }
-                console.log( data );
-                $scope.$broadcast( "callSuccess" );
+                $rootScope.$broadcast( "callFinish", { type: "success" } );
             } );
         };
 

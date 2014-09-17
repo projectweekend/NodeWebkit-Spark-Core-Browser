@@ -38,16 +38,15 @@ angMod.config( [
 var ctlMod = angular.module( "sparkCoreBrowserApp.controller-devices-detail", [] );
 
 
-ctlMod.controller( "DevicesDetail", [ "$scope", "$routeParams", "Spark", "Error",
-    function ( $scope, $routeParams, Spark, Error ) {
+ctlMod.controller( "DevicesDetail", [ "$scope", "$rootScope", "$routeParams", "Spark", "Error",
+    function ( $scope, $rootScope, $routeParams, Spark, Error ) {
 
         $scope.deviceVariables = [];
         $scope.deviceFunctions = [];
 
         $scope.call = function ( device ) {
 
-            console.log( device );
-            console.log( $routeParams.deviceId );
+            $rootScope.$broadcast( "callRunning" );
 
             Spark.callFunction( {
                 id: $routeParams.deviceId,
@@ -59,8 +58,7 @@ ctlMod.controller( "DevicesDetail", [ "$scope", "$routeParams", "Spark", "Error"
                     console.log( err );
                     return Error( err );
                 }
-                console.log( data );
-                $scope.$broadcast( "callSuccess" );
+                $rootScope.$broadcast( "callFinish", { type: "success" } );
             } );
         };
 
@@ -152,7 +150,7 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout",
 
         $scope.$on( "error", function ( e, args ) {
 
-            $scope.errorMessage = args.message;
+            $rootScope.errorMessage = args.message;
 
         } );
 
@@ -162,15 +160,27 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout",
 
         } );
 
-        $scope.$on( "callSuccess", function () {
+        $scope.$on( "callRunning", function () {
 
-            $scope.callSuccess = true;
+            $rootScope.callRunning = true;
+            console.log( "running" );
 
-            $timeout( function ( ) {
-                $scope.callSuccess = false;
+        } );
+
+        $scope.$on( "callFinish", function ( e, args ) {
+
+            $rootScope.callSuccess = args.type == "success";
+            $rootScope.callRunning = false;
+            console.log( "finish" );
+
+            $timeout( function () {
+                $rootScope.callSuccess = false;
             }, 2000 );
 
         } );
+
+        $rootScope.callSuccess = false;
+        $rootScope.callRunning = false;
 
     } ] );
 

@@ -12,7 +12,7 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout",
 
         $scope.$on( "error", function ( e, args ) {
 
-            $scope.errorMessage = args.message;
+            $rootScope.errorMessage = args.message;
 
         } );
 
@@ -22,14 +22,26 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout",
 
         } );
 
-        $scope.$on( "callSuccess", function () {
+        $scope.$on( "callRunning", function () {
 
-            $scope.callSuccess = true;
+            $rootScope.callRunning = true;
+            console.log( "running" );
 
-            $timeout( function ( ) {
-                $scope.callSuccess = false;
+        } );
+
+        $scope.$on( "callFinish", function ( e, args ) {
+
+            $rootScope.callSuccess = args.type == "success";
+            $rootScope.callRunning = false;
+            console.log( "finish" );
+
+            $timeout( function () {
+                $rootScope.callSuccess = false;
             }, 2000 );
 
         } );
+
+        $rootScope.callSuccess = false;
+        $rootScope.callRunning = false;
 
     } ] );
