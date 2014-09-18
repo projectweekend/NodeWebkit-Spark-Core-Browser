@@ -2,8 +2,7 @@ var angMod = angular.module( "sparkCoreBrowserApp", [
     "ngRoute",
     "sparkCoreBrowserApp.controller-main",
     "sparkCoreBrowserApp.controller-login",
-    "sparkCoreBrowserApp.controller-devices-list",
-    "sparkCoreBrowserApp.controller-devices-detail",
+    "sparkCoreBrowserApp.controller-devices",
     "sparkCoreBrowserApp.service-error",
     "sparkCoreBrowserApp.service-spark-core",
     "sparkCoreBrowserApp.service-gui"
@@ -22,13 +21,8 @@ angMod.config( [
         } );
 
         $routeProvider.when( "/devices", {
-            templateUrl: "templates/devices-list.html",
-            controller: "DevicesList"
-        } );
-
-        $routeProvider.when( "/devices/:deviceId", {
-            templateUrl: "templates/devices-detail.html",
-            controller: "DevicesDetail"
+            templateUrl: "templates/devices.html",
+            controller: "Devices"
         } );
 
         $routeProvider.otherwise( {

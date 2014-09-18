@@ -1,0 +1,13 @@
+<div id="drag-bar" style="-webkit-app-region: drag"></div>
+
+<div class="side-bar">
+    <div ng-repeat="d in devices" ng-click="loadDetails( d )" class="device clickable">
+        <a class="name">{{ d.name }}</a>
+        <i ng-if="d.connected" class="fa fa-wifi fa-2x success status-icon"></i>
+        <i ng-if="!d.connected" class="fa fa-exclamation fa-2   x warning status-icon"></i>
+    </div>
+</div>
+
+<div class="details">
+    DETAILS
+</div>

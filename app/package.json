@@ -8,11 +8,11 @@
         "icon": "link.png",
         "toolbar": true,
         "frame": true,
-        "width": 400,
-        "height": 500,
-        "min_width": 400,
+        "width": 600,
+        "height": 585,
+        "min_width": 600,
         "min_height": 500,
-        "max_width": 400,
+        "max_width": 600,
         "max_height": 500,
         "position": "mouse"
     }
