@@ -1,6 +1,9 @@
 <form ng-submit="claim()" name="claimCoreForm" id="claim-core" novalidate>
     <img id="logo" src="images/spark-core.png">
     <h2>New Core</h2>
+    <div ng-if="callRunning" class="info-message">
+        <i class="fa fa-refresh"></i> Connecting to core...
+    </div>
     <div class="error" ng-if="errorMessage.length > 0">
         <i class="fa fa-warning"></i> {{ errorMessage }}
     </div>

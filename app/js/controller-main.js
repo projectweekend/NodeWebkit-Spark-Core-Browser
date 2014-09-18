@@ -12,6 +12,7 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout", "G
 
         $scope.$on( "error", function ( e, args ) {
 
+            $rootScope.callRunning = false;
             $rootScope.errorMessage = args.message;
 
         } );
@@ -27,6 +28,12 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout", "G
             $scope.$apply( function () {
                 $location.path( "/claim-device" );
             } );
+
+        } );
+
+        $scope.$on( "claimSuccess", function () {
+
+            $location.path( "/devices" );
 
         } );
 

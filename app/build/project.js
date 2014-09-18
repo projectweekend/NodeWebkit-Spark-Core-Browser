@@ -45,11 +45,16 @@ ctlMod.controller( "ClaimDevice", [ "$scope", "$rootScope", "Error", "Spark",
 
         $scope.claim = function () {
 
+            $rootScope.$broadcast( "callRunning" );
+
             var success = function ( data ) {
+
                 if ( data.errors.length > 0 ) {
                     return Error( data );
                 }
+
                 console.log( data );
+                $rootScope.$broadcast( "callFinish" );
             };
 
             var failure = function ( err ) {
@@ -210,6 +215,7 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout", "G
 
         $scope.$on( "error", function ( e, args ) {
 
+            $rootScope.callRunning = false;
             $rootScope.errorMessage = args.message;
 
         } );
@@ -225,6 +231,12 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout", "G
             $scope.$apply( function () {
                 $location.path( "/claim-device" );
             } );
+
+        } );
+
+        $scope.$on( "claimSuccess", function () {
+
+            $location.path( "/devices" );
 
         } );
 

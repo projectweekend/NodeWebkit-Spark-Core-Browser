@@ -142,6 +142,13 @@ body {
 }
 
 
+.info-message {
+    color: #3875D7;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+
 .clickable {
     cursor: pointer;
 }
