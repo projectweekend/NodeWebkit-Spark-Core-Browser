@@ -10,12 +10,12 @@ ctlMod.controller( "ClaimDevice", [ "$scope", "$rootScope", "Error", "Spark",
 
             var success = function ( data ) {
 
-                if ( data.errors.length > 0 ) {
+                if ( typeof data.errors !== "undefined" ) {
                     return Error( data );
                 }
 
                 console.log( data );
-                $rootScope.$broadcast( "callFinish" );
+                $rootScope.$broadcast( "claimSuccess" );
             };
 
             var failure = function ( err ) {
