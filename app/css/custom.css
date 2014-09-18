@@ -35,8 +35,10 @@ body {
 
 
 .side-bar {
+    box-sizing: border-box;
     width: 215px;
     background: #D2D9E1;
+    border-right: 1px solid #B8B8B8;
 }
 
 
@@ -48,13 +50,13 @@ body {
 }
 
 
-.side-bar > .device:hover {
+.side-bar > .device.active {
     background: #3875D7;
     color: white;
 }
 
 
-.side-bar > .device:hover .name {
+.side-bar > .device.active .name {
     color: white;
 }
 
@@ -65,7 +67,14 @@ body {
     right: 10px;
     width: 38px;
     text-align: center;
+    color: #B0B6BC;
 }
+
+
+.side-bar > .device.active .status-icon {
+    color: white;
+}
+
 
 .side-bar > .device .name {
     display: block;
@@ -77,7 +86,7 @@ body {
 .details {
     box-sizing: border-box;
     width: 345px;
-    padding: 0 0 15px 30px;
+    padding: 10px 0 0 30px;
 }
 
 
@@ -91,8 +100,8 @@ body {
 }
 
 
-.details small .value {
-    color: #358EAC;
+.value {
+    color: #3875D7;
 }
 
 
