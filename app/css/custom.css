@@ -1,8 +1,25 @@
 
 body {
+    position: relative;
     font-family: sans-serif;
     margin: 0;
 }
+
+
+#drag-bar-login {
+    height: 20px;
+    width: 100%;
+    position: absolute;
+    top: -125px;
+}
+
+
+#drag-bar {
+    height: 20px;
+    width: 100%;
+    position: absolute;
+}
+
 
 #login {
     width: 250px;
@@ -79,13 +96,14 @@ body {
 }
 
 
-.device.clickable:hover i {
-    color: white;
+.device > h1 {
+    font-size: 1.75em;
 }
 
 
-.device > h1 {
-    font-size: 1.75em;
+.device > h1 a {
+    text-decoration: none;
+    color: black;
 }
 
 

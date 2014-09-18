@@ -1,5 +1,8 @@
-<a ng-repeat="d in devices" ng-href="#/devices/{{ d.id }}" class="device clickable">
-    <h1>{{ d.name }}</h1>
+<div id="drag-bar" style="-webkit-app-region: drag"></div>
+<div ng-repeat="d in devices" class="device">
+    <h1>
+        <a ng-href="#/devices/{{ d.id }}">{{ d.name }}</a>
+    </h1>
     <i ng-if="d.connected" class="fa fa-wifi fa-4x success status-icon"></i>
     <i ng-if="!d.connected" class="fa fa-exclamation fa-4x warning status-icon"></i>
-</a>
+</div>
