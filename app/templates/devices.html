@@ -1,0 +1,34 @@
+<div class="side-bar">
+    <div ng-repeat="d in devices" ng-click="loadDetail( d )" class="device clickable">
+        <span class="name">{{ d.name }}</span>
+        <i ng-if="d.connected" class="fa fa-wifi fa-2x status-icon"></i>
+        <i ng-if="!d.connected" class="fa fa-warning fa-2x status-icon"></i>
+    </div>
+</div>
+
+<div ng-if="devices.length > 0" class="details">
+    <h1>{{ detail.name }}</h1>
+    <small><span class="label">ID: </span><span class="value">{{ detail.id }}</span></small>
+    <small ng-if="detail.cc3000_patch_version"><span class="label">CC3000: </span><span class="value">v{{ detail.cc3000_patch_version }}</span></small>
+    <p ng-cloak ng-if="!detail.connected" class="not-connected">This Spark Core is not connected.</p>
+
+    <div ng-if="detailVariables.length > 0" class="device-variables">
+        <h3>Variables</h3>
+        <div ng-repeat="v in detailVariables" class="device-variable-item">
+            <label class="label one-quarter">{{ v.name }}: </label>
+            <span class="three-quarters">{{ v.value }}</span>
+        </div>
+    </div>
+
+    <div ng-if="detailFunctions.length > 0" class="device-functions">
+        <h3>Functions</h3>
+        <form ng-repeat="f in detailFunctions" class="device-function-item" ng-submit="call( f )">
+            <label class="label">{{ f.name }}:</label>
+            <input ng-model="f.argsName" class="one-quarter" type="text" placeholder="paramName" required/>
+            <input ng-model="f.argsValue" class="one-half" type="text" placeholder="param1,param2,param3" required/>
+            <button ng-if="!callRunning && !callSuccess" type="submit">Call</button>
+            <span ng-if="callRunning" class="call-feedback working">Working...</span>
+            <span ng-if="!callRunning && callSuccess" class="call-feedback success">Done!</span>
+        </form>
+    </div>
+</div>
