@@ -1,8 +1,8 @@
 var ctlMod = angular.module( "sparkCoreBrowserApp.controller-main", [] );
 
 
-ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout",
-    function ( $scope, $rootScope, $location, $timeout ) {
+ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout", "GUI",
+    function ( $scope, $rootScope, $location, $timeout, GUI ) {
 
         $scope.isActiveNavItem = function ( view ) {
 
@@ -19,6 +19,14 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout",
         $scope.$on( "authSuccess", function () {
 
             $location.path( "/devices" );
+
+        } );
+
+        $scope.$on( "claimDevice", function () {
+
+            $scope.$apply( function () {
+                $location.path( "/claim-device" );
+            } );
 
         } );
 

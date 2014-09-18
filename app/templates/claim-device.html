@@ -1,0 +1,13 @@
+<form ng-submit="claim()" name="claimCoreForm" id="claim-core" novalidate>
+    <img id="logo" src="images/spark-core.png">
+    <h2>New Core</h2>
+    <div class="error" ng-if="errorMessage.length > 0">
+        <i class="fa fa-warning"></i> {{ errorMessage }}
+    </div>
+    <div class="group">
+        <input ng-model="coreId" id="core-id" name="coreIdField" class="block" type="text" placeholder="0123456789abcdef01234567" required/>
+    </div>
+    <div class="group">
+        <button id="claim-button" class="block" type="submit">Claim</button>
+    </div
+</form>

@@ -3,6 +3,7 @@ var angMod = angular.module( "sparkCoreBrowserApp", [
     "sparkCoreBrowserApp.controller-main",
     "sparkCoreBrowserApp.controller-login",
     "sparkCoreBrowserApp.controller-devices",
+    "sparkCoreBrowserApp.controller-claim-device",
     "sparkCoreBrowserApp.service-error",
     "sparkCoreBrowserApp.service-spark-core",
     "sparkCoreBrowserApp.service-gui"
@@ -25,11 +26,40 @@ angMod.config( [
             controller: "Devices"
         } );
 
+        $routeProvider.when( "/claim-device", {
+            templateUrl: "templates/claim-device.html",
+            controller: "ClaimDevice"
+        } );
+
         $routeProvider.otherwise( {
             redirectTo: "/login"
         } );
 
 } ] );
+
+var ctlMod = angular.module("sparkCoreBrowserApp.controller-claim-device", [] );
+
+
+ctlMod.controller( "ClaimDevice", [ "$scope", "$rootScope", "Error", "Spark",
+    function ( $scope, $rootScope, Error, Spark ) {
+
+        $scope.claim = function () {
+
+            var success = function ( data ) {
+                if ( data.errors.length > 0 ) {
+                    return Error( data );
+                }
+                console.log( data );
+            };
+
+            var failure = function ( err ) {
+                return Error( err );
+            };
+
+            Spark.claimDevice( $scope.coreId ).then( success, failure );
+        };
+
+    } ] );
 
 var ctlMod = angular.module( "sparkCoreBrowserApp.controller-devices", [] );
 
@@ -169,8 +199,8 @@ ctlMod.controller( "Login", [ "$scope", "$rootScope", "$window", "Spark",
 var ctlMod = angular.module( "sparkCoreBrowserApp.controller-main", [] );
 
 
-ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout",
-    function ( $scope, $rootScope, $location, $timeout ) {
+ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout", "GUI",
+    function ( $scope, $rootScope, $location, $timeout, GUI ) {
 
         $scope.isActiveNavItem = function ( view ) {
 
@@ -187,6 +217,14 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout",
         $scope.$on( "authSuccess", function () {
 
             $location.path( "/devices" );
+
+        } );
+
+        $scope.$on( "claimDevice", function () {
+
+            $scope.$apply( function () {
+                $location.path( "/claim-device" );
+            } );
 
         } );
 
@@ -218,9 +256,18 @@ var svcMod = angular.module( "sparkCoreBrowserApp.service-error", [] );
 svcMod.factory( "Error", [ "$rootScope", function ( $rootScope ) {
 
     return function ( err ) {
-        console.log( err );
+        var errorMessage = "";
+
+        if ( typeof err.data !== "undefined" && err.data.error_description !== "undefined" ) {
+            errorMessage = err.data.error_description;
+        } else if ( typeof err.errors !== "undefined" ) {
+            errorMessage = err.errors[ 0 ];
+        } else {
+            errorMessage = "An error occurred";
+        }
+
         return $rootScope.$broadcast( "error", {
-            message: err.data.error_description
+            message: errorMessage
         } );
     };
 
@@ -232,17 +279,38 @@ var svcMod = angular.module( "sparkCoreBrowserApp.service-gui", [] );
 
 
 var nativeMenuBar = new gui.Menu( { type: "menubar" } );
-nativeMenuBar.createMacBuiltin( "Spark Manager" );
+nativeMenuBar.createMacBuiltin( "Spark Core Manager" );
 
 var win = gui.Window.get();
 win.menu = nativeMenuBar;
 
+var fileMenu = new gui.Menu();
+var helpMenu = new gui.Menu();
 
-svcMod.factory( "GUI", [ function () {
+win.menu.insert( new gui.MenuItem( { label: "File", submenu: fileMenu } ), 1 );
+win.menu.append( new gui.MenuItem( { label: "Help", submenu: helpMenu } ) );
+
+
+
+svcMod.factory( "GUI", [ "$rootScope", function ( $rootScope ) {
+
+    var newCoreOptions = {
+        label: "New Core",
+        click: function () {
+            $rootScope.$broadcast( "claimDevice" );
+        },
+        key: "n",
+        modifiers: "cmd"
+    };
+
+    fileMenu.append( new gui.MenuItem( newCoreOptions ) );
 
     return gui;
 
 } ] );
+
+var spark = require( "spark" );
+
 
 var svcMod = angular.module( "sparkCoreBrowserApp.service-spark-core", [] );
 
@@ -416,8 +484,8 @@ svcMod.factory( 'API', [ "$http", "$window", function ( $http, $window ) {
 } ] );
 
 
-svcMod.factory( "Spark", [ "$http", "API", "Base64",
-    function ( $http, API, Base64 ) {
+svcMod.factory( "Spark", [ "$http", "$q", "API", "Base64",
+    function ( $http, $q, API, Base64 ) {
 
     var apiBase = "https://api.spark.io";
 
@@ -441,6 +509,8 @@ svcMod.factory( "Spark", [ "$http", "API", "Base64",
             } )
             .success( function ( data, status, headers, config ) {
 
+                spark.login( { accessToken: data.access_token } );
+
                 return callback( null, data );
 
             } )
@@ -455,6 +525,21 @@ svcMod.factory( "Spark", [ "$http", "API", "Base64",
 
             } );
 
+        },
+        claimDevice: function ( id ) {
+            var deferred = $q.defer();
+
+            var success = function ( data ) {
+                return deferred.resolve( data );
+            };
+
+            var failure = function ( err ) {
+                return deferred.reject( err );
+            };
+
+            spark.claimCore( id ).then( success, failure );
+
+            return deferred.promise;
         },
         listDevices: function ( callback ) {
             return API.$get( apiBase + "/v1/devices", callback );

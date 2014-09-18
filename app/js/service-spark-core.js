@@ -1,3 +1,6 @@
+var spark = require( "spark" );
+
+
 var svcMod = angular.module( "sparkCoreBrowserApp.service-spark-core", [] );
 
 
@@ -170,8 +173,8 @@ svcMod.factory( 'API', [ "$http", "$window", function ( $http, $window ) {
 } ] );
 
 
-svcMod.factory( "Spark", [ "$http", "API", "Base64",
-    function ( $http, API, Base64 ) {
+svcMod.factory( "Spark", [ "$http", "$q", "API", "Base64",
+    function ( $http, $q, API, Base64 ) {
 
     var apiBase = "https://api.spark.io";
 
@@ -195,6 +198,8 @@ svcMod.factory( "Spark", [ "$http", "API", "Base64",
             } )
             .success( function ( data, status, headers, config ) {
 
+                spark.login( { accessToken: data.access_token } );
+
                 return callback( null, data );
 
             } )
@@ -209,6 +214,21 @@ svcMod.factory( "Spark", [ "$http", "API", "Base64",
 
             } );
 
+        },
+        claimDevice: function ( id ) {
+            var deferred = $q.defer();
+
+            var success = function ( data ) {
+                return deferred.resolve( data );
+            };
+
+            var failure = function ( err ) {
+                return deferred.reject( err );
+            };
+
+            spark.claimCore( id ).then( success, failure );
+
+            return deferred.promise;
         },
         listDevices: function ( callback ) {
             return API.$get( apiBase + "/v1/devices", callback );
