@@ -25,7 +25,6 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout",
         $scope.$on( "callRunning", function () {
 
             $rootScope.callRunning = true;
-            console.log( "running" );
 
         } );
 
@@ -33,7 +32,6 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout",
 
             $rootScope.callSuccess = args.type == "success";
             $rootScope.callRunning = false;
-            console.log( "finish" );
 
             $timeout( function () {
                 $rootScope.callSuccess = false;

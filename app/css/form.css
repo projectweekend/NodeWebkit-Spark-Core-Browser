@@ -3,7 +3,7 @@ form > .group {
 }
 
 input {
-    border: 1px solid black;
+    border: 1px solid #B8B8B8;
     padding: 0 10px;
     height: 30px;
     line-height: 1.5;
@@ -12,21 +12,32 @@ input {
 input:focus {
     outline: none;
     border: none;
-    background: black;
+    background: #3875D7;
     color: white;
 }
 
+
+input:focus::-webkit-input-placeholder {
+    color: white;
+}
+
+
 button {
     background-color: white;
-    border: 1px solid black;
+    border: 1px solid #B8B8B8;
     height: 30px;
 }
 
 button:active {
-    background-color: black;
+    background-color: #3875D7;
     color: white;
 }
 
 button:focus {
     outline: none;
+}
+
+
+::-webkit-input-placeholder {
+    color: #B8B8B8;
 }

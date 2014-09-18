@@ -4,23 +4,7 @@ body {
     position: relative;
     font-family: sans-serif;
     margin: 0;
-    padding: 20px;
-}
-
-
-#drag-bar-login {
-    height: 20px;
-    width: 100%;
-    position: absolute;
-    top: -125px;
-}
-
-
-#drag-bar {
-    height: 20px;
-    width: 100%;
-    position: absolute;
-    top: 0;
+    /*padding: 20px;*/
 }
 
 
@@ -44,42 +28,46 @@ body {
 
 .side-bar,
 .details {
-    float: left;
     box-sizing: border-box;
-    height: 500px;
+    float: left;
+    height: 600px;
 }
 
 
 .side-bar {
-    width: 200px;
+    width: 215px;
+    background: #D2D9E1;
 }
 
 
 .side-bar > .device {
     box-sizing: border-box;
     position: relative;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    padding-left: 15px;
-    border-top: 1px solid black;
+    padding: 15px 0 15px 15px;
     width: 100%;
 }
 
 
-.side-bar > .device:last-child {
-    border-bottom: 1px solid black;
+.side-bar > .device:hover {
+    background: #3875D7;
+    color: white;
+}
+
+
+.side-bar > .device:hover .name {
+    color: white;
 }
 
 
 .side-bar > .device .status-icon {
     position: absolute;
     top: 10px;
-    right: 0;
+    right: 10px;
     width: 38px;
     text-align: center;
 }
 
-.side-bar > .device a.name {
+.side-bar > .device .name {
     display: block;
     color: black;
     text-decoration: none;
@@ -87,7 +75,24 @@ body {
 
 
 .details {
+    box-sizing: border-box;
     width: 345px;
+    padding: 0 0 15px 30px;
+}
+
+
+.details h1,
+.details h2 {
+    margin: 0;
+}
+
+.details small {
+    display: block;
+}
+
+
+.details small .value {
+    color: #358EAC;
 }
 
 
@@ -138,25 +143,6 @@ body {
 
 .no-border {
     border: none;
-}
-
-
-.device-detail-item {
-    padding-left: 20px;
-    padding-right: 20px;
-}
-
-
-.device-variables,
-.device-functions {
-    margin-top: 35px;
-    padding-left: 20px;
-    padding-right: 20px;
-}
-
-.device-variables > h3,
-.device-functions > h3 {
-    color: blue;
 }
 
 

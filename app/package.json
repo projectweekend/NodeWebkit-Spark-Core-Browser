@@ -11,9 +11,9 @@
         "width": 600,
         "height": 585,
         "min_width": 600,
-        "min_height": 500,
+        "min_height": 585,
         "max_width": 600,
-        "max_height": 500,
+        "max_height": 585,
         "position": "mouse"
     }
 }

@@ -31,115 +31,107 @@ angMod.config( [
 
 } ] );
 
-var ctlMod = angular.module( "sparkCoreBrowserApp.controller-devices-detail", [] );
+var ctlMod = angular.module( "sparkCoreBrowserApp.controller-devices", [] );
 
 
-ctlMod.controller( "DevicesDetail", [ "$scope", "$rootScope", "$routeParams", "$interval", "Spark", "Error",
-    function ( $scope, $rootScope, $routeParams, $interval, Spark, Error ) {
+ctlMod.controller( "Devices", [ "$scope", "$rootScope", "$interval", "Error", "Spark",
+    function ( $scope, $rootScope, $interval, Error, Spark ) {
 
-        $scope.deviceVariables = [];
-        $scope.deviceFunctions = [];
+        $scope.devices = [];
 
-        $scope.call = function ( device ) {
+
+        var refreshVariables = function () {
+            $scope.detailVariables.map( function ( variable ) {
+                variable.refresh();
+            } );
+        };
+
+
+        $scope.call = function ( f ) {
 
             $rootScope.$broadcast( "callRunning" );
 
             Spark.callFunction( {
-                id: $routeParams.deviceId,
-                name: device.name,
-                argsName: device.argsName,
-                argsValue: device.argsValue
+                id: f.deviceId,
+                name: f.name,
+                argsName: f.argsName,
+                argsValue: f.argsValue
             }, function ( err, data ) {
                 if ( err ) {
-                    console.log( err );
                     return Error( err );
                 }
                 $rootScope.$broadcast( "callFinish", { type: "success" } );
             } );
         };
 
-        var makeVariable = function ( name ) {
 
-            var variable = {
-                name: name,
-                value: "",
-                refresh: function () {
-                    var self = this;
-                    Spark.readVariable( {
-                        id: $routeParams.deviceId,
-                        name: self.name
-                    }, function ( err, data ) {
-                        self.value = data.result;
-                    } );
-                }
+        $scope.loadDetail = function ( device ) {
+
+            $scope.detailVariables = [];
+            $scope.detailFunctions = [];
+
+            var makeVariable = function ( name ) {
+                var variable = {
+                    name: name,
+                    value: "",
+                    refresh: function () {
+                        var self = this;
+                        Spark.readVariable( {
+                            id: device.id,
+                            name: self.name
+                        }, function ( err, data ) {
+                            self.value = data.result;
+                        } );
+                    }
+                };
+                return variable;
             };
 
-            return variable;
+            if ( !device.connected ) {
+                $scope.detail = device;
+                return;
+            }
+
+            Spark.readDetail( device.id, function ( err, data ) {
+                if ( err ) {
+                    return Error( err );
+                }
+                for ( var v in data.variables ) {
+                    if ( data.variables.hasOwnProperty( v ) ) {
+                        $scope.detailVariables.push( makeVariable( v ) );
+                    }
+                }
+                for ( var f = 0; f < data.functions.length; f++ ) {
+                    $scope.detailFunctions.push( {
+                        deviceId: device.id,
+                        name: data.functions[ f ],
+                        argsName: "",
+                        argsValue: ""
+                    } );
+                }
+                $scope.detail = data;
+
+                refreshVariables();
+                $interval( refreshVariables, 5000 );
+
+            } );
+
         };
 
-        var refreshVariables = function () {
-            $scope.deviceVariables.map( function ( variable ) {
-                variable.refresh();
+
+        $scope.loadDeviceList = function () {
+            Spark.listDevices( function ( err, data ) {
+                if ( err ) {
+                    return Error( err );
+                }
+                $scope.devices = data;
+                $scope.loadDetail( $scope.devices[ 0 ] );
             } );
         };
 
-        Spark.readDetail( $routeParams.deviceId, function ( err, data ) {
-
-            if ( err ) {
-                return Error( err );
-            }
-
-            for ( var v in data.variables ) {
-                if ( data.variables.hasOwnProperty( v ) ) {
-                    $scope.deviceVariables.push( makeVariable( v ) );
-                }
-            }
-
-            for ( var f = 0; f < data.functions.length; f++ ) {
-                $scope.deviceFunctions.push( {
-                    name: data.functions[ f ],
-                    argsName: "",
-                    argsValue: ""
-                } );
-            }
-
-            $scope.device = data;
-
-            refreshVariables();
-            $interval( refreshVariables, 10000 );
-
-        } );
+        $scope.loadDeviceList();
 
     } ] );
-
-var ctlMod = angular.module( "sparkCoreBrowserApp.controller-devices-list", [] );
-
-
-ctlMod.controller( "DevicesList", [ "$scope", "Spark", "Error",
-    function ( $scope, Spark, Error ) {
-
-        Spark.listDevices( function ( err, data ) {
-            if ( err ) {
-                return Error( err );
-            }
-            $scope.devices = data;
-        } );
-
-    } ] );
-
-var ctlMod = angular.module( "sparkCoreBrowserApp.controller-devices", [] );
-
-
-ctlMod.controller( "Devices", [ "$scope", "Spark", function ( $scope, Spark ) {
-
-    Spark.listDevices( function ( err, data ) {
-        if ( err ) {
-            return Error( err );
-        }
-        $scope.devices = data;
-    } );
-
-} ] );
 
 var ctlMod = angular.module( "sparkCoreBrowserApp.controller-login", [] );
 
@@ -201,7 +193,6 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout",
         $scope.$on( "callRunning", function () {
 
             $rootScope.callRunning = true;
-            console.log( "running" );
 
         } );
 
@@ -209,7 +200,6 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout",
 
             $rootScope.callSuccess = args.type == "success";
             $rootScope.callRunning = false;
-            console.log( "finish" );
 
             $timeout( function () {
                 $rootScope.callSuccess = false;
