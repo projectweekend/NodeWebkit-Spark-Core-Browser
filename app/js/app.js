@@ -4,6 +4,7 @@ var angMod = angular.module( "sparkCoreBrowserApp", [
     "sparkCoreBrowserApp.controller-login",
     "sparkCoreBrowserApp.controller-devices",
     "sparkCoreBrowserApp.controller-claim-device",
+    "sparkCoreBrowserApp.controller-confirm-delete",
     "sparkCoreBrowserApp.service-error",
     "sparkCoreBrowserApp.service-spark-core",
     "sparkCoreBrowserApp.service-gui"
@@ -24,6 +25,11 @@ angMod.config( [
         $routeProvider.when( "/devices", {
             templateUrl: "templates/devices.html",
             controller: "Devices"
+        } );
+
+        $routeProvider.when( "/devices/:deviceId/confirm-delete", {
+            templateUrl: "templates/confirm-delete.html",
+            controller: "ConfirmDelete"
         } );
 
         $routeProvider.when( "/claim-device", {

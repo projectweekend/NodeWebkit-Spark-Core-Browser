@@ -86,6 +86,12 @@ ctlMod.controller( "Devices", [ "$scope", "$rootScope", "$interval", "Error", "S
         };
 
 
+        $scope.confirmDelete = function () {
+
+            $rootScope.$broadcast( "confirmDelete", { deviceId: $scope.detail.id } );
+
+        };
+
         $scope.loadDeviceList = function () {
             Spark.listDevices( function ( err, data ) {
                 if ( err ) {

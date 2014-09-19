@@ -7,6 +7,7 @@
 </div>
 
 <div ng-if="devices.length > 0" class="details">
+
     <h1>{{ detail.name }}</h1>
     <small><span class="label">ID: </span><span class="value">{{ detail.id }}</span></small>
     <small ng-if="detail.cc3000_patch_version"><span class="label">CC3000: </span><span class="value">v{{ detail.cc3000_patch_version }}</span></small>
@@ -31,4 +32,7 @@
             <span ng-if="!callRunning && callSuccess" class="call-feedback success">Done!</span>
         </form>
     </div>
+
+    <button ng-click="confirmDelete()" id="delete-button" class="warning">Delete</button>
+
 </div>

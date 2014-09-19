@@ -10,6 +10,7 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout", "G
 
         };
 
+
         $scope.$on( "error", function ( e, args ) {
 
             $rootScope.callRunning = false;
@@ -17,11 +18,13 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout", "G
 
         } );
 
-        $scope.$on( "authSuccess", function () {
+
+        $scope.$on( "goToDevices", function () {
 
             $location.path( "/devices" );
 
         } );
+
 
         $scope.$on( "claimDevice", function () {
 
@@ -31,6 +34,14 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout", "G
 
         } );
 
+
+        $scope.$on( "confirmDelete", function ( e, args ) {
+
+            $location.path( "/devices/" + args.deviceId + "/confirm-delete" );
+
+        } );
+
+
         $scope.$on( "claimSuccess", function () {
 
             $rootScope.callRunning = false;
@@ -38,11 +49,13 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout", "G
 
         } );
 
+
         $scope.$on( "callRunning", function () {
 
             $rootScope.callRunning = true;
 
         } );
+
 
         $scope.$on( "callFinish", function ( e, args ) {
 
@@ -54,6 +67,7 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout", "G
             }, 2000 );
 
         } );
+
 
         $rootScope.callSuccess = false;
         $rootScope.callRunning = false;

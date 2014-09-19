@@ -4,6 +4,7 @@ var angMod = angular.module( "sparkCoreBrowserApp", [
     "sparkCoreBrowserApp.controller-login",
     "sparkCoreBrowserApp.controller-devices",
     "sparkCoreBrowserApp.controller-claim-device",
+    "sparkCoreBrowserApp.controller-confirm-delete",
     "sparkCoreBrowserApp.service-error",
     "sparkCoreBrowserApp.service-spark-core",
     "sparkCoreBrowserApp.service-gui"
@@ -24,6 +25,11 @@ angMod.config( [
         $routeProvider.when( "/devices", {
             templateUrl: "templates/devices.html",
             controller: "Devices"
+        } );
+
+        $routeProvider.when( "/devices/:deviceId/confirm-delete", {
+            templateUrl: "templates/confirm-delete.html",
+            controller: "ConfirmDelete"
         } );
 
         $routeProvider.when( "/claim-device", {
@@ -62,6 +68,18 @@ ctlMod.controller( "ClaimDevice", [ "$scope", "$rootScope", "Error", "Spark",
             };
 
             Spark.claimDevice( $scope.coreId ).then( success, failure );
+        };
+
+    } ] );
+
+var ctlMod = angular.module( "sparkCoreBrowserApp.controller-confirm-delete", [] );
+
+
+ctlMod.controller( "ConfirmDelete", [ "$scope", "$rootScope",
+    function ( $scope, $rootScope ) {
+
+        $scope.listDevices = function () {
+            $rootScope.$broadcast( "goToDevices" );
         };
 
     } ] );
@@ -154,6 +172,12 @@ ctlMod.controller( "Devices", [ "$scope", "$rootScope", "$interval", "Error", "S
         };
 
 
+        $scope.confirmDelete = function () {
+
+            $rootScope.$broadcast( "confirmDelete", { deviceId: $scope.detail.id } );
+
+        };
+
         $scope.loadDeviceList = function () {
             Spark.listDevices( function ( err, data ) {
                 if ( err ) {
@@ -184,7 +208,7 @@ ctlMod.controller( "Login", [ "$scope", "$rootScope", "$window", "Spark",
                 } );
             }
             $window.sessionStorage.token = data.access_token;
-            return $rootScope.$broadcast( "authSuccess" );
+            return $rootScope.$broadcast( "goToDevices" );
 
         };
 
@@ -213,6 +237,7 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout", "G
 
         };
 
+
         $scope.$on( "error", function ( e, args ) {
 
             $rootScope.callRunning = false;
@@ -220,11 +245,13 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout", "G
 
         } );
 
-        $scope.$on( "authSuccess", function () {
+
+        $scope.$on( "goToDevices", function () {
 
             $location.path( "/devices" );
 
         } );
+
 
         $scope.$on( "claimDevice", function () {
 
@@ -234,6 +261,14 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout", "G
 
         } );
 
+
+        $scope.$on( "confirmDelete", function ( e, args ) {
+
+            $location.path( "/devices/" + args.deviceId + "/confirm-delete" );
+
+        } );
+
+
         $scope.$on( "claimSuccess", function () {
 
             $rootScope.callRunning = false;
@@ -241,11 +276,13 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout", "G
 
         } );
 
+
         $scope.$on( "callRunning", function () {
 
             $rootScope.callRunning = true;
 
         } );
+
 
         $scope.$on( "callFinish", function ( e, args ) {
 
@@ -257,6 +294,7 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout", "G
             }, 2000 );
 
         } );
+
 
         $rootScope.callSuccess = false;
         $rootScope.callRunning = false;

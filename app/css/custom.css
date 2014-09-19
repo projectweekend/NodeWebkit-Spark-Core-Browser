@@ -16,6 +16,13 @@ body {
 }
 
 
+#delete-core {
+    width: 300px;
+    height: 250px;
+    margin: 175px 200px;
+}
+
+
 #login h2,
 #claim-core h2 {
     display: inline-block;
@@ -25,6 +32,15 @@ body {
 #logo {
     display: inline-block;
     width: 32px;
+}
+
+
+#delete-button {
+    font-weight: bold;
+    margin: 0;
+    position: absolute;
+    bottom: 20px;
+    width: 420px;
 }
 
 
@@ -123,7 +139,7 @@ body {
 
 
 .one-half {
-    width: 50%;
+    width: 49%;
 }
 
 

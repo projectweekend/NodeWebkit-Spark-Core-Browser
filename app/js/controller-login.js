@@ -14,7 +14,7 @@ ctlMod.controller( "Login", [ "$scope", "$rootScope", "$window", "Spark",
                 } );
             }
             $window.sessionStorage.token = data.access_token;
-            return $rootScope.$broadcast( "authSuccess" );
+            return $rootScope.$broadcast( "goToDevices" );
 
         };
 
