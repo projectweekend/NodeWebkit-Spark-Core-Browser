@@ -42,7 +42,7 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout", "G
         } );
 
 
-        $scope.$on( "claimSuccess", function () {
+        $scope.$on( "claimDeleteSuccess", function () {
 
             $rootScope.callRunning = false;
             $location.path( "/devices" );

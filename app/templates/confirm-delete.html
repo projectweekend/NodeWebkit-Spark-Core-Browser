@@ -1,5 +1,11 @@
 <div id="delete-core">
     <h2>Remove this core?</h2>
+    <div ng-if="callRunning" class="info-message">
+        <i class="fa fa-refresh"></i> Connecting to core...
+    </div>
+    <div class="error" ng-if="errorMessage.length > 0">
+        <i class="fa fa-warning"></i> {{ errorMessage }}
+    </div>
     <button class="warning one-half" ng-click="deleteDevice()">Yes</button>
     <button class="one-half" ng-click="listDevices()">No</button>
 </div>

@@ -60,7 +60,7 @@ ctlMod.controller( "ClaimDevice", [ "$scope", "$rootScope", "Error", "Spark",
                 }
 
                 console.log( data );
-                $rootScope.$broadcast( "claimSuccess" );
+                $rootScope.$broadcast( "claimDeleteSuccess" );
             };
 
             var failure = function ( err ) {
@@ -75,11 +75,33 @@ ctlMod.controller( "ClaimDevice", [ "$scope", "$rootScope", "Error", "Spark",
 var ctlMod = angular.module( "sparkCoreBrowserApp.controller-confirm-delete", [] );
 
 
-ctlMod.controller( "ConfirmDelete", [ "$scope", "$rootScope",
-    function ( $scope, $rootScope ) {
+ctlMod.controller( "ConfirmDelete", [ "$scope", "$rootScope", "$routeParams", "Spark",
+    function ( $scope, $rootScope, $routeParams, Spark ) {
 
         $scope.listDevices = function () {
             $rootScope.$broadcast( "goToDevices" );
+        };
+
+
+        $scope.deleteDevice = function () {
+
+            $rootScope.$broadcast( "callRunning" );
+
+            var success = function ( data ) {
+
+                if ( typeof data.errors !== "undefined" ) {
+                    return Error( data );
+                }
+
+                console.log( data );
+                $rootScope.$broadcast( "claimDeleteSuccess" );
+            };
+
+            var failure = function ( err ) {
+                return Error( err );
+            };
+
+            Spark.removeDevice( $routeParams.deviceId ).then( success, failure );
         };
 
     } ] );
@@ -269,7 +291,7 @@ ctlMod.controller( "Main", [ "$scope", "$rootScope", "$location", "$timeout", "G
         } );
 
 
-        $scope.$on( "claimSuccess", function () {
+        $scope.$on( "claimDeleteSuccess", function () {
 
             $rootScope.callRunning = false;
             $location.path( "/devices" );
@@ -589,6 +611,21 @@ svcMod.factory( "Spark", [ "$http", "$q", "API", "Base64",
             };
 
             spark.claimCore( id ).then( success, failure );
+
+            return deferred.promise;
+        },
+        removeDevice: function ( id ) {
+            var deferred = $q.defer();
+
+            var success = function ( data ) {
+                return deferred.resolve( data );
+            };
+
+            var failure = function ( err ) {
+                return deferred.reject( err );
+            };
+
+            spark.removeCore( id ).then( success, failure );
 
             return deferred.promise;
         },

@@ -15,7 +15,7 @@ ctlMod.controller( "ClaimDevice", [ "$scope", "$rootScope", "Error", "Spark",
                 }
 
                 console.log( data );
-                $rootScope.$broadcast( "claimSuccess" );
+                $rootScope.$broadcast( "claimDeleteSuccess" );
             };
 
             var failure = function ( err ) {

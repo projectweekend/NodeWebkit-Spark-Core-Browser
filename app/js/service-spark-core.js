@@ -230,6 +230,21 @@ svcMod.factory( "Spark", [ "$http", "$q", "API", "Base64",
 
             return deferred.promise;
         },
+        removeDevice: function ( id ) {
+            var deferred = $q.defer();
+
+            var success = function ( data ) {
+                return deferred.resolve( data );
+            };
+
+            var failure = function ( err ) {
+                return deferred.reject( err );
+            };
+
+            spark.removeCore( id ).then( success, failure );
+
+            return deferred.promise;
+        },
         listDevices: function ( callback ) {
             return API.$get( apiBase + "/v1/devices", callback );
         },
