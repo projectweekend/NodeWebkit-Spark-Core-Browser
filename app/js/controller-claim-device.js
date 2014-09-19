@@ -9,12 +9,9 @@ ctlMod.controller( "ClaimDevice", [ "$scope", "$rootScope", "Error", "Spark",
             $rootScope.$broadcast( "callRunning" );
 
             var success = function ( data ) {
-
                 if ( typeof data.errors !== "undefined" ) {
                     return Error( data );
                 }
-
-                console.log( data );
                 $rootScope.$broadcast( "claimDeleteSuccess" );
             };
 

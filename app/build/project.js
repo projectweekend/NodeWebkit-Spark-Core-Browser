@@ -54,12 +54,9 @@ ctlMod.controller( "ClaimDevice", [ "$scope", "$rootScope", "Error", "Spark",
             $rootScope.$broadcast( "callRunning" );
 
             var success = function ( data ) {
-
                 if ( typeof data.errors !== "undefined" ) {
                     return Error( data );
                 }
-
-                console.log( data );
                 $rootScope.$broadcast( "claimDeleteSuccess" );
             };
 
@@ -92,13 +89,15 @@ ctlMod.controller( "ConfirmDelete", [ "$scope", "$rootScope", "$routeParams", "S
                 if ( typeof data.errors !== "undefined" ) {
                     return Error( data );
                 }
-
-                console.log( data );
                 $rootScope.$broadcast( "claimDeleteSuccess" );
             };
 
             var failure = function ( err ) {
-                return Error( err );
+
+                return $rootScope.$broadcast( "error", {
+                    message: err.message
+                } );
+
             };
 
             Spark.removeDevice( $routeParams.deviceId ).then( success, failure );
